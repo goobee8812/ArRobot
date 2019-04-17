@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">ArRobot</string>
+    <string name="download_apkname" translatable="false">%s.apk</string>
+</resources>
