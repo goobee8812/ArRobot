@@ -1,9 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".mvp.ResutlActivity">
+    android:background="@drawable/ar_robot_result_bg"
+    tools:context=".mvp.ResultActivity">
+    <com.cloudring.arrobot.gelin.defineview.TopbarView
+        android:id="@+id/id_top_view"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/DIMEN_73DP">
+    </com.cloudring.arrobot.gelin.defineview.TopbarView>
 
-</android.support.constraint.ConstraintLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/id_top_view"
+        >
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/id_normal_recycler_view"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_marginTop="@dimen/DIMEN_10DP"
+            android:layout_marginLeft="@dimen/DIMEN_30DP"
+            android:layout_marginRight="@dimen/DIMEN_30DP"
+            >
+        </android.support.v7.widget.RecyclerView>
+        <RelativeLayout
+            android:layout_width="@dimen/DIMEN_210DP"
+            android:layout_height="match_parent"
+            android:background="@drawable/ar_robot_hot_bg"
+            >
+            <TextView
+                android:id="@+id/id_hot_title_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ar_robot_hot_top_bg"
+                android:textSize="@dimen/DIMEN_22SP"
+                android:textColor="#fff"
+                android:text="热门游戏推荐"
+                android:gravity="center"
+                />
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/id_hot_recycler_view"
+                android:layout_width="@dimen/DIMEN_180DP"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/id_hot_title_tv"
+                android:layout_marginTop="@dimen/DIMEN_8DP"
+                android:layout_centerHorizontal="true"
+                >
+            </android.support.v7.widget.RecyclerView>
+        </RelativeLayout>
+    </LinearLayout>
+
+</RelativeLayout>

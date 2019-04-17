@@ -7,15 +7,15 @@ package com.cloudring.arrobot.gelin.mvp.network.request;
 
 public class GetMarketZipDataRequest {
 
-    GetMarketZipDataReqeustData data;
+    GetMarketZipDataRequestData data;
 
     public GetMarketZipDataRequest(String deviceId, String versionNum) {
-        data = new GetMarketZipDataReqeustData();
+        data = new GetMarketZipDataRequestData();
         data.deviceId = deviceId;
         data.versionNum = versionNum;
     }
 
-    class GetMarketZipDataReqeustData {
+    class GetMarketZipDataRequestData {
         public String deviceId;
         public String versionNum;
     }

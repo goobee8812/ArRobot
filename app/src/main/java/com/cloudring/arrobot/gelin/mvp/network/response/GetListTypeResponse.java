@@ -1,5 +1,6 @@
 package com.cloudring.arrobot.gelin.mvp.network.response;
 
+import com.cloudring.arrobot.gelin.base.BaseResponse;
 import com.cloudring.arrobot.gelin.mvp.modle.AppType;
 import com.google.gson.annotations.SerializedName;
 

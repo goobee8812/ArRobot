@@ -3,7 +3,7 @@ package com.cloudring.arrobot.gelin.mvp;
 import com.arellomobile.mvp.MvpView;
 
 
-public interface ResultActivityView extends MvpView{
+public interface ResultView extends MvpView{
 
     void showMsg(String msg);
     void showMsg(int msg);

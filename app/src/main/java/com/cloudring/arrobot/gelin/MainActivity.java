@@ -1,9 +1,12 @@
 package com.cloudring.arrobot.gelin;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
+
+import com.cloudring.arrobot.gelin.mvp.ResultActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -45,7 +48,8 @@ public class MainActivity extends AppCompatActivity {
     public void onClickEvent(View v) {
         switch (v.getId()) {
             case R.id.id_my_game_iv:
-
+                Intent intent = new Intent(MainActivity.this, ResultActivity.class);
+                startActivity(intent);
                 break;
             case R.id.id_jiyi_iv:
 

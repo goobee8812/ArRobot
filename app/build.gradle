@@ -4,7 +4,7 @@ android {
     compileSdkVersion 27
     defaultConfig {
         applicationId "com.cloudring.arrobot.gelin"
-        minSdkVersion 15
+        minSdkVersion 19
         targetSdkVersion 27
         versionCode 1
         versionName "1.0"
@@ -22,6 +22,14 @@ android {
     }
 }
 
+allprojects {
+    repositories {
+        flatDir {
+            dirs 'libs'
+        }
+    }
+}
+
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'com.android.support:appcompat-v7:27.1.1'
@@ -29,6 +37,8 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+
+    compile(name: 'getLearn_sdk_1.0.1', ext: 'aar')
 
     implementation 'com.jakewharton:butterknife:8.7.0'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.7.0'
@@ -40,6 +50,8 @@ dependencies {
     implementation 'com.youth.banner:banner:1.4.9'
     implementation 'org.jsoup:jsoup:1.11.3'
     implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.4'
+
+
 
     implementation 'com.squareup.okhttp3:okhttp:3.9.0'
     implementation 'com.squareup.okhttp3:okhttp-urlconnection:3.9.0'

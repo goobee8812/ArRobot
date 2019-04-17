@@ -1,4 +1,4 @@
-package com.cloudring.arrobot.gelin.mvp.network.response;
+package com.cloudring.arrobot.gelin.base;
 
 import com.google.gson.annotations.SerializedName;
 

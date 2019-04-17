@@ -1,10 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".mvp.ResutlActivity">
+    android:layout_height="@dimen/DIMEN_73DP"
+    tools:context=".mvp.ResultActivity">
+    <ImageView
+        android:id="@+id/id_back_iv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/ar_robot_back"
+        />
+    <TextView
+        android:id="@+id/id_top_title_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:text="我的收藏"
+        android:textColor="#fff"
+        android:textSize="@dimen/DIMEN_36SP"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="@dimen/DIMEN_250DP"
+        />
+    <LinearLayout
+        android:visibility="gone"
+        android:id="@+id/id_delete_ll"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="@dimen/DIMEN_250DP"
+        >
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/ar_robot_delete"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/DIMEN_22SP"
+            android:text="删除"
+            android:layout_marginLeft="@dimen/DIMEN_5DP"
+            android:textColor="#fff"
+            />
+    </LinearLayout>
 
-</android.support.constraint.ConstraintLayout>
+    <Button
+        android:visibility="gone"
+        android:id="@+id/id_confirm_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="确定"
+        android:textSize="@dimen/DIMEN_22SP"
+        android:background="@drawable/ar_robot_enter"
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="@dimen/DIMEN_100DP"
+        />
+</RelativeLayout>
