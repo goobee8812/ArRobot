@@ -1,4 +1,4 @@
-package com.cloudring.arrobot.gelin.mvp;
+package com.cloudring.arrobot.gelin.mvp.category;
 
 import android.annotation.TargetApi;
 import android.content.Context;
@@ -7,7 +7,6 @@ import android.os.Build;
 import com.arellomobile.mvp.InjectViewState;
 import com.cloudring.arrobot.gelin.MainApplication;
 import com.cloudring.arrobot.gelin.base.BasePresenter;
-import com.cloudring.arrobot.gelin.download.Check;
 import com.cloudring.arrobot.gelin.download.NetworkClient;
 import com.cloudring.arrobot.gelin.download.NetworkUtil;
 import com.cloudring.arrobot.gelin.mvp.network.APIService;
@@ -37,6 +36,7 @@ public class ResultPresenter extends BasePresenter<ResultView> {
         GetAppListByTypeRequest lookUpBookReadCountRequest = new GetAppListByTypeRequest(
                 deviceId
                 ,"");
+        getViewState().refreshList("","","");
 //        apiService.getListApp(map,lookUpBookReadCountRequest).enqueue(new Callback<LookUpBookCountResponse>() {
 //            @Override
 //            public void onResponse(Call<LookUpBookCountResponse> call, Response<LookUpBookCountResponse> response) {

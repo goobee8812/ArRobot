@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/ar_robot_result_bg"
+    tools:context=".mvp.category.ResultActivity">
+
+    <com.cloudring.arrobot.gelin.defineview.TopbarView
+        android:id="@+id/id_top_view"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/DIMEN_73DP"></com.cloudring.arrobot.gelin.defineview.TopbarView>
+
+    <ListView
+        android:id="@+id/id_list_view"
+        android:layout_width="@dimen/DIMEN_182DP"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/id_top_view"
+        android:background="@drawable/ar_robot_hot_bg"
+        android:layout_marginTop="@dimen/DIMEN_10DP"
+        >
+
+    </ListView>
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/id_normal_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/id_top_view"
+        android:layout_toRightOf="@+id/id_list_view"
+        android:layout_marginLeft="@dimen/DIMEN_50DP"
+        android:layout_marginRight="@dimen/DIMEN_50DP"
+        android:layout_marginTop="@dimen/DIMEN_10DP"></android.support.v7.widget.RecyclerView>
+
+</RelativeLayout>

@@ -1,9 +1,9 @@
-package com.cloudring.arrobot.gelin.mvp;
+package com.cloudring.arrobot.gelin.mvp.mine;
 
 import com.arellomobile.mvp.MvpView;
 
 
-public interface ResultView extends MvpView{
+public interface MineView extends MvpView{
 
     void showMsg(String msg);
     void showMsg(int msg);

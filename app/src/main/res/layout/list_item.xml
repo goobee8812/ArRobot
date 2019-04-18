@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="@dimen/DIMEN_182DP"
+    android:layout_height="@dimen/DIMEN_61DP"
+    android:orientation="vertical"
+    >
+    <TextView
+        android:id="@+id/id_item_tv"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/DIMEN_60DP"
+        android:textColor="#fff"
+        android:textSize="@dimen/DIMEN_24SP"
+        android:text="记忆"
+        android:gravity="center"
+        android:background="#0E0A3D"
+        />
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/DIMEN_1DP"
+        android:background="@drawable/ar_robot_line"
+        />
+</LinearLayout>

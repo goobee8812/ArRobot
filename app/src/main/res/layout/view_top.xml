@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="@dimen/DIMEN_73DP"
-    tools:context=".mvp.ResultActivity">
+    tools:context=".mvp.category.ResultActivity">
     <ImageView
         android:id="@+id/id_back_iv"
         android:layout_width="wrap_content"

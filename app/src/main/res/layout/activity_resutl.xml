@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/ar_robot_result_bg"
-    tools:context=".mvp.ResultActivity">
+    tools:context=".mvp.category.ResultActivity">
     <com.cloudring.arrobot.gelin.defineview.TopbarView
         android:id="@+id/id_top_view"
         android:layout_width="match_parent"
