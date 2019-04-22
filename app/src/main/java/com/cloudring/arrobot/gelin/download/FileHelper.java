@@ -349,9 +349,9 @@ public class FileHelper {
         String appCachePath = null;
 
         if (checkSDCard()) {
-            appCachePath = Environment.getExternalStorageDirectory() + "/MediaPlayerDownload/" ;
+            appCachePath = Environment.getExternalStorageDirectory() + "/GelinDownload/" ;
         } else {
-            appCachePath = Environment.getDataDirectory().getPath() + "/MediaPlayerDownload/" ;
+            appCachePath = Environment.getDataDirectory().getPath() + "/GelinDownload/" ;
         }
         File file = new File(appCachePath);
         if (!file.exists()) {

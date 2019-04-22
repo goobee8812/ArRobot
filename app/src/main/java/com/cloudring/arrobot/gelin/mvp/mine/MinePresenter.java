@@ -9,7 +9,6 @@ import com.cloudring.arrobot.gelin.MainApplication;
 import com.cloudring.arrobot.gelin.base.BasePresenter;
 import com.cloudring.arrobot.gelin.download.NetworkClient;
 import com.cloudring.arrobot.gelin.download.NetworkUtil;
-import com.cloudring.arrobot.gelin.mvp.category.ResultView;
 import com.cloudring.arrobot.gelin.mvp.network.APIService;
 import com.cloudring.arrobot.gelin.mvp.network.APIUtils;
 import com.cloudring.arrobot.gelin.mvp.network.request.GetAppListByTypeRequest;
@@ -33,9 +32,7 @@ public class MinePresenter extends BasePresenter<MineView> {
 
     public void getNormalList(Map<String, Object> map, String userid, String deviceId, Context context){
         APIService apiService = NetworkClient.getInstance().getService(APIService.class);
-        GetAppListByTypeRequest lookUpBookReadCountRequest = new GetAppListByTypeRequest(
-                deviceId
-                ,"");
+        GetAppListByTypeRequest lookUpBookReadCountRequest = new GetAppListByTypeRequest("52");
         getViewState().refreshList("","","");
 //        apiService.getListApp(map,lookUpBookReadCountRequest).enqueue(new Callback<LookUpBookCountResponse>() {
 //            @Override

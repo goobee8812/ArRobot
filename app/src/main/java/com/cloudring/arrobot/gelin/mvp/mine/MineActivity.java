@@ -17,9 +17,7 @@ import com.cloudring.arrobot.gelin.R;
 import com.cloudring.arrobot.gelin.adapter.AppAdapter;
 import com.cloudring.arrobot.gelin.adapter.ListAdapter;
 import com.cloudring.arrobot.gelin.adapter.OnItemClickCallback;
-import com.cloudring.arrobot.gelin.bean.AppItem;
-import com.cloudring.arrobot.gelin.mvp.category.ResultPresenter;
-import com.cloudring.arrobot.gelin.mvp.category.ResultView;
+import com.cloudring.arrobot.gelin.mvp.modle.AppItem;
 import com.cloudring.arrobot.gelin.utils.GlobalUtil;
 
 import java.lang.ref.WeakReference;
@@ -30,7 +28,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class MineActivity extends MvpAppCompatActivity implements ResultView {
+public class MineActivity extends MvpAppCompatActivity implements MineView {
 
 
     @BindView(R.id.id_normal_recycler_view)
@@ -52,7 +50,7 @@ public class MineActivity extends MvpAppCompatActivity implements ResultView {
     private static String type = "";
 
     @InjectPresenter
-    public ResultPresenter mPresenter;
+    public MinePresenter mPresenter;
 
     private static final int REFRESH_DATA = 0x001;      //刷新数据
 
@@ -92,14 +90,6 @@ public class MineActivity extends MvpAppCompatActivity implements ResultView {
     }
 
     private void initData() {
-        if (getIntent().hasExtra(GlobalUtil.INTENT_TYPE_KEY)){
-            type = getIntent().getStringExtra(GlobalUtil.INTENT_TYPE_KEY);
-            if (type.equals(GlobalUtil.INTENT_TYPE_GAME)){
-                titleTv.setText("我的游戏");
-            }else if (type.equals(GlobalUtil.INTENT_TYPE_COLLECTION)){
-                titleTv.setText("我的收藏");
-            }
-        }
         normalListData = new ArrayList<>();
         itemListData = new ArrayList<>();
         initItemData();
@@ -123,7 +113,16 @@ public class MineActivity extends MvpAppCompatActivity implements ResultView {
             }
         });
         itemList.setAdapter(listAdapter);
-        mPresenter.getNormalList("", "", this);
+        if (getIntent().hasExtra(GlobalUtil.INTENT_TYPE_KEY)){
+            type = getIntent().getStringExtra(GlobalUtil.INTENT_TYPE_KEY);
+            if (type.equals(GlobalUtil.INTENT_TYPE_GAME)){
+                normalAdapter.setType(1);
+                titleTv.setText("我的游戏");
+            }else if (type.equals(GlobalUtil.INTENT_TYPE_COLLECTION)){
+                titleTv.setText("我的收藏");
+                normalAdapter.setType(2);
+            }
+        }
     }
 
     private void initItemData() {
@@ -155,6 +154,7 @@ public class MineActivity extends MvpAppCompatActivity implements ResultView {
         normalRecycler.setLayoutManager(gridLayoutManager);
         normalRecycler.setAdapter(normalAdapter);
 
+        mPresenter.getNormalList("","",MineActivity.this);
     }
 
     @Override

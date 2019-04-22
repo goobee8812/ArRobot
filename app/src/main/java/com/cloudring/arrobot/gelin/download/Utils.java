@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.cloudring.arrobot.gelin.utils.LogUtil;
 import com.jakewharton.retrofit2.adapter.rxjava2.HttpException;
 
 import org.reactivestreams.Publisher;
@@ -13,6 +14,8 @@ import org.reactivestreams.Publisher;
 import java.io.Closeable;
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.net.ConnectException;
 import java.net.ProtocolException;
 import java.net.SocketException;
@@ -282,5 +285,32 @@ public class Utils {
 
     private static String contentRange(Response<?> response) {
         return response.headers().get("Content-Range");
+    }
+
+    public static String getSerialNumber() {
+        String serialNumber = null;
+        try {
+            Class<?> c = Class.forName("android.os.SystemProperties");
+            Method get = c.getMethod("get", String.class);
+            serialNumber = (String) get.invoke(c, "ro.xiaoxian.no");
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        }
+        LogUtil.LogShow(serialNumber,LogUtil.DEBUG);
+        return serialNumber;
+    }
+
+    public static boolean deleteAPKExists(String mFilepath) {
+        File file = new File(mFilepath);
+        if (file.exists()  && file.isFile()) {
+            return  file.delete();
+        }
+        return false;
     }
 }

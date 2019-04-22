@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="@dimen/DIMEN_180DP"
-    android:layout_height="@dimen/DIMEN_207DP"
+    android:layout_height="@dimen/DIMEN_234DP"
     android:layout_marginBottom="@dimen/DIMEN_10DP"
     >
 
@@ -11,11 +11,20 @@
         android:layout_height="@dimen/DIMEN_180DP"
         android:background="@drawable/ar_robot_img_default"
         />
-
+    <TextView
+        android:id="@+id/id_name_tv"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/DIMEN_27DP"
+        android:textSize="@dimen/DIMEN_18SP"
+        android:gravity="center"
+        android:textColor="#fff"
+        android:layout_below="@+id/id_img"
+        android:background="@drawable/ar_robot_btn_bg"
+        />
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/DIMEN_27DP"
-        android:layout_below="@+id/id_img"
+        android:layout_below="@+id/id_name_tv"
         android:orientation="horizontal"
         >
         <TextView

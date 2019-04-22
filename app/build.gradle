@@ -78,4 +78,6 @@ dependencies {
     implementation 'com.facebook.fresco:webpsupport:0.13.0'
     implementation 'com.facebook.fresco:animated-webp:0.13.0'
 
+    implementation 'com.alibaba:fastjson:1.2.44'
+
 }

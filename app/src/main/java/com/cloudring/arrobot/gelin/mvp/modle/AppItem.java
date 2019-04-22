@@ -1,88 +1,129 @@
 package com.cloudring.arrobot.gelin.mvp.modle;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import com.google.gson.annotations.SerializedName;
 
 /**
  * yc
  */
 public class AppItem {
+    @JSONField(ordinal = 1)
+    @SerializedName("id")
+    private String id;  //App ID
 
-    @SerializedName("appId")
-    private String appId;  //App ID
+    @JSONField(ordinal = 2)
+    @SerializedName("subject")
+    private String subject;  //App 名字
 
-    @SerializedName("appName")
-    private String appName;  //App 名字
+    @JSONField(ordinal = 3)
+    @SerializedName("studySection")
+    private String studySection;  //APP 图片地址
 
-    @SerializedName("icoUrl")
-    private String icoUrl;  //APP 图片地址
+    @JSONField(ordinal = 4)
+    @SerializedName("categoryId")
+    private String categoryId;  //APP 包名
 
-    @SerializedName("appData")
-    private String appData;  //APP 包名
+    @JSONField(ordinal = 5)
+    @SerializedName("fileName")
+    private String fileName;  //APP 下载地址
 
-    @SerializedName("downloadUrl")
-    private String downloadUrl;  //APP 下载地址
+    @JSONField(ordinal = 6)
+    @SerializedName("grade")
+    private String grade;  //APP 包名
+
+    @JSONField(ordinal = 7)
+    @SerializedName("courseId")
+    private String courseId;  //APP 包名
+
+    @JSONField(ordinal = 8)
+    @SerializedName("version")
+    private String version;  //APP 包名
+
+    @JSONField(ordinal = 9)
+    @SerializedName("semester")
+    private String semester;  //APP 包名
 
 
-    @SerializedName("className")
-    private String className;  //APP 包名
 
-    public String getAppName() {
-        return appName;
+    public AppItem(String id, String fileName) {
+        this.id = id;
+        this.fileName = fileName;
     }
 
-    public void setAppName(String appName) {
-        this.appName = appName;
+    public String getId() {
+        return id;
     }
 
-    public String getAppId() {
-        return appId;
+    public void setId(String id) {
+        this.id = id;
     }
 
-    public void setAppId(String appId) {
-        this.appId = appId;
+    public String getSubject() {
+        return subject;
     }
 
-    public String getIcoUrl() {
-        return icoUrl;
+    public void setSubject(String subject) {
+        this.subject = subject;
     }
 
-    public void setIcoUrl(String icoUrl) {
-        this.icoUrl = icoUrl;
+    public String getStudySection() {
+        return studySection;
     }
 
-    public String getDownloadUrl() {
-        return downloadUrl;
+    public void setStudySection(String studySection) {
+        this.studySection = studySection;
     }
 
-    public void setDownloadUrl(String downloadUrl) {
-        this.downloadUrl = downloadUrl;
+    public String getCategoryId() {
+        return categoryId;
     }
 
-    public String getAppData() {
-        return appData;
+    public void setCategoryId(String categoryId) {
+        this.categoryId = categoryId;
     }
 
-    public void setAppData(String appData) {
-        this.appData = appData;
+    public String getFileName() {
+        return fileName;
     }
 
-    public String getClassName() {
-        return className;
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
     }
 
-    public void setClassName(String className) {
-        this.className = className;
+    public String getGrade() {
+        return grade;
+    }
+
+    public void setGrade(String grade) {
+        this.grade = grade;
+    }
+
+    public String getCourseId() {
+        return courseId;
+    }
+
+    public void setCourseId(String courseId) {
+        this.courseId = courseId;
+    }
+
+    public String getVersion() {
+        return version;
+    }
+
+    public void setVersion(String version) {
+        this.version = version;
+    }
+
+    public String getSemester() {
+        return semester;
+    }
+
+    public void setSemester(String semester) {
+        this.semester = semester;
     }
 
     @Override
     public String toString() {
-        return "AppItem{" +
-                "appName='" + appName + '\'' +
-                ", appId=" + appId +
-                ", icoUrl='" + icoUrl + '\'' +
-                ", downloadUrl='" + downloadUrl + '\'' +
-                ", appData='" + appData + '\'' +
-                ", className='" + className + '\'' +
-                '}';
+        return super.toString();
     }
 }

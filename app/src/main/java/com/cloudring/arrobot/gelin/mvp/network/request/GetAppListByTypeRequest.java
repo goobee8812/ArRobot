@@ -7,17 +7,15 @@ public class GetAppListByTypeRequest {
 
     GetListAppByTypeId data;
 
-    public GetAppListByTypeRequest(String typeDeviceId, String md5) {
+    public GetAppListByTypeRequest(String categoryId) {
         data = new GetListAppByTypeId();
-        data.typeDeviceId = typeDeviceId;
-        data.md5 = md5;
+        data.categoryId = categoryId;
     }
 
     /**
      * 请求参数对象
      */
     class GetListAppByTypeId {
-        public String typeDeviceId;
-        public String md5;
+        public String categoryId;
     }
 }

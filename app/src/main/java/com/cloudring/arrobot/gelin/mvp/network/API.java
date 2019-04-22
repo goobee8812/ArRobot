@@ -12,8 +12,8 @@ public class API {
         //获取我的类型
         public static final String REQUEST_MARKET_LISTTYPE = "cloudring-property-mobile-web/donutApp/findDonutAppDevice";
 
-        //获取我的书架
-        public static final String REQUEST_MARKET_LISTAPP = "cloudring-property-mobile-web/donutApp/findDonutAppDeviceDetail";
+        //获取Apk列表
+        public static final String REQUEST_MARKET_LISTAPP = "cloudring-property-mobile-web/geling/gelingApkList";
 
         //获取视频专辑
         public static final String REQUEST_ALBUM_LIST = "cloudring-property-mobile-web/iqiyi/selectQqvideoByCategoryVersion";

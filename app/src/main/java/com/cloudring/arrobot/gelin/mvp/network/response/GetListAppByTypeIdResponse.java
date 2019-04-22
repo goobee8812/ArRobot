@@ -11,18 +11,11 @@ import java.util.List;
  */
 
 public class GetListAppByTypeIdResponse extends BaseResponse {
-
     @SerializedName("data")
     public  GetListAppBean data;
 
     public class GetListAppBean{
-        @SerializedName("typeDeviceId")
-        public String typeDeviceId;
-        @SerializedName("donutAppList")
-        public List<AppItem> listApp;
-        @SerializedName("md5")
-        public String md5;
-
+        @SerializedName("apkList")
+        public List<AppItem> apkList;
     }
-
 }

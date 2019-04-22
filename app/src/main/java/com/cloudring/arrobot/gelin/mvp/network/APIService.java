@@ -19,10 +19,6 @@ import retrofit2.http.POST;
 
 public interface APIService {
 
-    //获取应用类型列表接口
-    @POST(API.URL.REQUEST_MARKET_LISTTYPE)
-    Call<GetListTypeResponse> getListType(@Body GetListTypeRequest registerRequest);
-
     //获取app列表接口
     @POST(API.URL.REQUEST_MARKET_LISTAPP)
     Call<GetListAppByTypeIdResponse> getListApp(@Body GetAppListByTypeRequest registerRequest);
