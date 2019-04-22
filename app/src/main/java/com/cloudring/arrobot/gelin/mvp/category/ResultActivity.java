@@ -69,7 +69,10 @@ public class ResultActivity extends MvpAppCompatActivity implements ResultView{
     @InjectPresenter
     public ResultPresenter mPresenter;
 
+    private String test = "http://image.czbsit.com/static/Beesmart_1.0.12_2019-03-20.apk";
+
     private static final int REFRESH_DATA = 0x001;      //刷新数据
+    private static final int START_DOWNLOAD = 0x002;      //启动下载
 
     private MyHandler myHandler = new MyHandler(this);
     static class MyHandler extends Handler {
@@ -87,6 +90,11 @@ public class ResultActivity extends MvpAppCompatActivity implements ResultView{
                         activity.normalAdapter.setDataChanged(activity.normalList);
                         activity.hotAdapter.notifyDataSetChanged();
                         Toast.makeText(activity, "更新数据" + activity.normalList.get(0).getFileName(), Toast.LENGTH_SHORT).show();
+                        break;
+                    case START_DOWNLOAD:
+                        String url = (String)msg.obj;
+                        activity.downFile(url);
+//                        activity.downFile(activity.test);
                         break;
                     default:
                         break;
@@ -110,6 +118,9 @@ public class ResultActivity extends MvpAppCompatActivity implements ResultView{
             @Override
             public void sdkSetApkInsta(String s) {
                 LogUtil.LogShow("安装结果是：" + s,LogUtil.DEBUG);
+                if (s.equals("0")){
+                    //安装成功，写入数据库
+                }
             }
         });
         //url回调
@@ -117,7 +128,12 @@ public class ResultActivity extends MvpAppCompatActivity implements ResultView{
             @Override
             public void sdkGetTempUrl(String s, String s1, String s2, String s3) {
                 LogUtil.LogShow("状态码："+ s + "，资源地址：" + s2,LogUtil.DEBUG);
-//                downFile(s2);
+                if (s.equals("0")){
+                    Message message = Message.obtain();
+                    message.what = START_DOWNLOAD;
+                    message.obj = s2;
+                    myHandler.sendMessage(message);
+                }
             }
         });
     }
@@ -284,7 +300,6 @@ public class ResultActivity extends MvpAppCompatActivity implements ResultView{
         if (downloadUrl == null || downloadUrl.equals("")) {
             return;
         }
-
         noticeDialog = new UniversalDialog.Builder(ResultActivity.this)
                 .setLayoutView(R.layout.dialog_down_apk)
                 .setVagueBackground(true)
@@ -311,7 +326,6 @@ public class ResultActivity extends MvpAppCompatActivity implements ResultView{
                     }
                     isDown = false;
                 }
-
             }
         });
 
@@ -345,7 +359,8 @@ public class ResultActivity extends MvpAppCompatActivity implements ResultView{
                         isDown = false;
                         mFilpath = "";
                         //需要调用格林的安装方式
-                        mGetLearnSdk.setApkInstall(ResultActivity.this,Environment.getExternalStorageDirectory().getAbsolutePath()+"/Download","996.apk");
+                        LogUtil.LogShow("安装的apk:" + name,LogUtil.DEBUG);
+                        mGetLearnSdk.setApkInstall(ResultActivity.this,path,name);
 //                        install(file);
                     }
 

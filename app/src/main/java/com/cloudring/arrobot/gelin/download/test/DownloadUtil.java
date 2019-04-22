@@ -1,5 +1,7 @@
 package com.cloudring.arrobot.gelin.download.test;
 
+import com.cloudring.arrobot.gelin.utils.LogUtil;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -39,6 +41,9 @@ public class DownloadUtil {
      * @param listener     下载监听
      */
     public void download(final String url, final String destFileDir, final String destFileName, final OnDownloadListener listener) {
+        //拆分参数
+        String[] strings = url.split("\\?");
+        LogUtil.LogShow("连接是：" + url,LogUtil.DEBUG);
         Request request = new Request.Builder().url(url).build();
         isDownFile=true;
         okHttpClient.newCall(request).enqueue(new Callback() {

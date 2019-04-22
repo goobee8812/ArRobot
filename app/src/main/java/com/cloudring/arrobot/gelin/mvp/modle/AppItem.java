@@ -13,37 +13,41 @@ public class AppItem {
 
     @JSONField(ordinal = 2)
     @SerializedName("subject")
-    private String subject;  //App 名字
+    private String subject;  //
 
     @JSONField(ordinal = 3)
     @SerializedName("studySection")
-    private String studySection;  //APP 图片地址
+    private String studySection;  //
 
     @JSONField(ordinal = 4)
     @SerializedName("categoryId")
-    private String categoryId;  //APP 包名
+    private String categoryId;  //APP 分类
 
     @JSONField(ordinal = 5)
     @SerializedName("fileName")
-    private String fileName;  //APP 下载地址
+    private String fileName;  //APP 名字
 
     @JSONField(ordinal = 6)
     @SerializedName("grade")
-    private String grade;  //APP 包名
+    private String grade;  //APP
 
     @JSONField(ordinal = 7)
     @SerializedName("courseId")
-    private String courseId;  //APP 包名
+    private String courseId;  //APP
 
     @JSONField(ordinal = 8)
     @SerializedName("version")
-    private String version;  //APP 包名
+    private String version;  //APP
 
     @JSONField(ordinal = 9)
     @SerializedName("semester")
-    private String semester;  //APP 包名
+        private String semester;  //APP
 
+    @SerializedName("packageName")
+    private String packageName;  //APP 包名
 
+    @SerializedName("type")
+    private String type;  //APP 0:默认  1：已下载  2：收藏
 
     public AppItem(String id, String fileName) {
         this.id = id;
@@ -120,6 +124,22 @@ public class AppItem {
 
     public void setSemester(String semester) {
         this.semester = semester;
+    }
+
+    public String getPackageName() {
+        return packageName;
+    }
+
+    public void setPackageName(String packageName) {
+        this.packageName = packageName;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     @Override

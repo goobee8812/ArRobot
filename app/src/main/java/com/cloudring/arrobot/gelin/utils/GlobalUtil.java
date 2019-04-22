@@ -13,4 +13,15 @@ public class GlobalUtil {
     public static String INTENT_TYPE_MATH = "intent_type_math";
     public static String INTENT_TYPE_COGNITION = "intent_type_cognition";
     public static String INTENT_TYPE_LOGIC = "intent_type_logic";
+
+    /**
+     * 种类
+     */
+    public static String CATEGORY_TYPE_JIYI = "54";
+    public static String CATEGORY_TYPE_QINGSHANG = "51";
+    public static String CATEGORY_TYPE_HOBBY = "52";
+    public static String CATEGORY_TYPE_LANGUAGE = "66";
+    public static String CATEGORY_TYPE_MATH = "67";
+    public static String CATEGORY_TYPE_COGNITION = "68";
+    public static String CATEGORY_TYPE_LOGIC = "69";
 }

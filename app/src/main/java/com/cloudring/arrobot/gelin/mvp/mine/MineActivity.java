@@ -97,6 +97,12 @@ public class MineActivity extends MvpAppCompatActivity implements MineView {
             @Override
             public void onClick(View view, AppItem info) {
                 Toast.makeText(MineActivity.this, "点击了下载" + info.getId(), Toast.LENGTH_SHORT).show();
+                if (type.equals(GlobalUtil.INTENT_TYPE_GAME)){
+                    //在我的游戏界面
+                }else if (type.equals(GlobalUtil.INTENT_TYPE_COLLECTION)){
+                    //在我的收藏界面
+                }
+
             }
         }, new OnItemClickCallback<AppItem>() {
 

@@ -61,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
                 ,""
                 ,"http://test-rscloud.getlearn.cn");
 
-        mGetLearnSdk.getEquipmentJurisdiction(MainActivity.this, Utils.getSerialNumber());
+        mGetLearnSdk.getEquipmentJurisdiction(MainActivity.this, "");
         //设备授权回调
         mGetLearnSdk.setOnEquipmentDelegateListener(new OnEquipmentDelegateListener() {
             @Override
