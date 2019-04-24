@@ -47,11 +47,17 @@ public class AppItem {
     private String packageName;  //APP 包名
 
     @SerializedName("type")
-    private String type;  //APP 0:默认  1：已下载  2：收藏
+    private String type;  //APP 0：默认  1：已下载  2：收藏
 
     public AppItem(String id, String fileName) {
         this.id = id;
         this.fileName = fileName;
+    }
+
+    public AppItem(String id, String fileName,String packageName) {
+        this.id = id;
+        this.fileName = fileName;
+        this.packageName = packageName;
     }
 
     public String getId() {

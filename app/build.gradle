@@ -1,5 +1,7 @@
 apply plugin: 'com.android.application'
 
+def dbflow_version = "4.2.4"
+
 android {
     compileSdkVersion 27
     defaultConfig {
@@ -24,6 +26,7 @@ android {
 
 allprojects {
     repositories {
+        maven { url 'https://jitpack.io' }
         flatDir {
             dirs 'libs'
         }
@@ -80,4 +83,8 @@ dependencies {
 
     implementation 'com.alibaba:fastjson:1.2.44'
 
+
+    compile "com.github.Raizlabs.DBFlow:dbflow-core:${dbflow_version}"
+    compile "com.github.Raizlabs.DBFlow:dbflow:${dbflow_version}"
+    annotationProcessor "com.github.Raizlabs.DBFlow:dbflow-processor:${dbflow_version}"
 }

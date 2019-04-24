@@ -50,7 +50,7 @@ public class ListAdapter extends BaseAdapter {
             viewHolder = (ViewHolder) convertView.getTag();
         }
         viewHolder.itemTv.setText(mDatas.get(position));
-        viewHolder.itemTv.setOnClickListener(v -> clickCallback.onClick(v,mDatas.get(position)));
+        viewHolder.itemTv.setOnClickListener(v -> clickCallback.onClick(v,mDatas.get(position),position));
         return convertView;
     }
 

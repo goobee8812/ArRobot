@@ -3,6 +3,8 @@ package com.cloudring.arrobot.gelin;
 import android.app.Application;
 import android.content.Context;
 
+import com.raizlabs.android.dbflow.config.FlowManager;
+
 public class MainApplication extends Application {
     private static Context mContext;
     private static MainApplication instance;
@@ -13,6 +15,7 @@ public class MainApplication extends Application {
         super.onCreate();
         instance=this;
         mContext = getApplicationContext();
+        FlowManager.init(this);
     }
 
     public static Context getContext() {

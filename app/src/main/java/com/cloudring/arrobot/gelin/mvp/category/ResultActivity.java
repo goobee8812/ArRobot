@@ -2,7 +2,6 @@ package com.cloudring.arrobot.gelin.mvp.category;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.widget.GridLayoutManager;
@@ -17,10 +16,11 @@ import android.widget.Toast;
 
 import com.arellomobile.mvp.MvpAppCompatActivity;
 import com.arellomobile.mvp.presenter.InjectPresenter;
-import com.cloudring.arrobot.gelin.MainActivity;
 import com.cloudring.arrobot.gelin.R;
 import com.cloudring.arrobot.gelin.adapter.AppAdapter;
 import com.cloudring.arrobot.gelin.adapter.OnItemClickCallback;
+import com.cloudring.arrobot.gelin.contentdb.AppInfo;
+import com.cloudring.arrobot.gelin.contentdb.AppInfoDao;
 import com.cloudring.arrobot.gelin.download.FileHelper;
 import com.cloudring.arrobot.gelin.download.UniversalDialog;
 import com.cloudring.arrobot.gelin.download.Utils;
@@ -73,6 +73,7 @@ public class ResultActivity extends MvpAppCompatActivity implements ResultView{
 
     private static final int REFRESH_DATA = 0x001;      //刷新数据
     private static final int START_DOWNLOAD = 0x002;      //启动下载
+    private static final int REFRESH_ITEM = 0x003;      //个别刷新
 
     private MyHandler myHandler = new MyHandler(this);
     static class MyHandler extends Handler {
@@ -95,6 +96,8 @@ public class ResultActivity extends MvpAppCompatActivity implements ResultView{
                         String url = (String)msg.obj;
                         activity.downFile(url);
 //                        activity.downFile(activity.test);
+                        break;
+                    case REFRESH_ITEM:
                         break;
                     default:
                         break;
@@ -160,25 +163,38 @@ public class ResultActivity extends MvpAppCompatActivity implements ResultView{
         hotList = new ArrayList<>();
         normalAdapter = new AppAdapter(normalList, new OnItemClickCallback<AppItem>() {
             @Override
-            public void onClick(View view, AppItem info) {
+            public void onClick(View view, AppItem info,int position) {
                 Toast.makeText(ResultActivity.this, "点击了下载" + info.getId(), Toast.LENGTH_SHORT).show();
                 mGetLearnSdk.getResUrl(ResultActivity.this,info.getId());
             }
         }, new OnItemClickCallback<AppItem>() {
             @Override
-            public void onClick(View view, AppItem info) {
+            public void onClick(View view, AppItem info,int position) {
                 Toast.makeText(ResultActivity.this, "点击了收藏" + info.getId(), Toast.LENGTH_SHORT).show();
+                AppInfo appInfo = new AppInfo();
+                appInfo.setId(info.getId());
+                appInfo.setCategoryId(info.getCategoryId());
+                appInfo.setFileName(info.getFileName());
+                appInfo.setType("2");
+                AppInfoDao.add(appInfo);
+                //删掉数据
+                normalList.remove(position);
+//                normalAdapter.notifyItemChanged(position);
+                normalAdapter.notifyItemRemoved(position);
+                if (position != normalList.size()) {
+                    normalAdapter.notifyItemRangeChanged(position, normalList.size() - position);
+                }
             }
         });
         hotAdapter = new AppAdapter(hotList, new OnItemClickCallback<AppItem>() {
             @Override
-            public void onClick(View view, AppItem info) {
+            public void onClick(View view, AppItem info,int position) {
                 Toast.makeText(ResultActivity.this, "点击了下载" + info.getId(), Toast.LENGTH_SHORT).show();
             }
         }, new OnItemClickCallback<AppItem>() {
 
             @Override
-            public void onClick(View view, AppItem info) {
+            public void onClick(View view, AppItem info,int position) {
                 Toast.makeText(ResultActivity.this, "点击了收藏" + info.getId(), Toast.LENGTH_SHORT).show();
             }
         });

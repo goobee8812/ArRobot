@@ -70,14 +70,14 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> {
         holder.downloadStr.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                downloadCallback.onClick(view, mAppList.get(position));
+                downloadCallback.onClick(view, mAppList.get(position),position);
             }
         });
 
         holder.collectionStr.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                collectionCallback.onClick(view, mAppList.get(position));
+                collectionCallback.onClick(view, mAppList.get(position),position);
             }
         });
     }

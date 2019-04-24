@@ -29,9 +29,9 @@ public class DBHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         LogUtil.LogShow( "begin oncreate db",LogUtil.DEBUG);
-        db.execSQL(ConstantSQLite.createAppTypeTab);
+//        db.execSQL(ConstantSQLite.createAppTypeTab);
         db.execSQL(ConstantSQLite.createAppListTab);
-        db.execSQL(ConstantSQLite.createAblumListTab);
+//        db.execSQL(ConstantSQLite.createAblumListTab);
         LogUtil.LogShow( "end oncreate db",LogUtil.DEBUG);
     }
 
@@ -40,10 +40,10 @@ public class DBHelper extends SQLiteOpenHelper {
         LogUtil.LogShow( "onDowngrade  oldVersion:" + oldVersion + "  newVersion:",LogUtil.DEBUG);
         db.execSQL("DROP TABLE IF EXISTS " + ConstantSQLite.APP_LIST_TABLE_NAME);
         db.execSQL(ConstantSQLite.createAppListTab);
-        db.execSQL("DROP TABLE IF EXISTS " + ConstantSQLite.APP_TYPE_TABLE_NAME);
-        db.execSQL(ConstantSQLite.createAppTypeTab);
-        db.execSQL("DROP TABLE IF EXISTS " + ConstantSQLite.AUDIO_ALBUM_NAME);
-        db.execSQL(ConstantSQLite.createAblumListTab);
+//        db.execSQL("DROP TABLE IF EXISTS " + ConstantSQLite.APP_TYPE_TABLE_NAME);
+//        db.execSQL(ConstantSQLite.createAppTypeTab);
+//        db.execSQL("DROP TABLE IF EXISTS " + ConstantSQLite.AUDIO_ALBUM_NAME);
+//        db.execSQL(ConstantSQLite.createAblumListTab);
         LogUtil.LogShow( "onDowngrade  oldVersion:" + oldVersion + "  newVersion:" + newVersion,LogUtil.DEBUG);
     }
 
@@ -52,10 +52,10 @@ public class DBHelper extends SQLiteOpenHelper {
         LogUtil.LogShow( "oldVersion:" + oldVersion + "  newVersion:" + newVersion,LogUtil.DEBUG);
         db.execSQL("DROP TABLE IF EXISTS " + ConstantSQLite.APP_LIST_TABLE_NAME);
         db.execSQL(ConstantSQLite.createAppListTab);
-        db.execSQL("DROP TABLE IF EXISTS " + ConstantSQLite.APP_TYPE_TABLE_NAME);
-        db.execSQL(ConstantSQLite.createAppTypeTab);
-        db.execSQL("DROP TABLE IF EXISTS " + ConstantSQLite.AUDIO_ALBUM_NAME);
-        db.execSQL(ConstantSQLite.createAblumListTab);
+//        db.execSQL("DROP TABLE IF EXISTS " + ConstantSQLite.APP_TYPE_TABLE_NAME);
+//        db.execSQL(ConstantSQLite.createAppTypeTab);
+//        db.execSQL("DROP TABLE IF EXISTS " + ConstantSQLite.AUDIO_ALBUM_NAME);
+//        db.execSQL(ConstantSQLite.createAblumListTab);
     }
 
     /**

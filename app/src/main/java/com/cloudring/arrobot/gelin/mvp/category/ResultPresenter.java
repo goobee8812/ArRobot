@@ -8,16 +8,21 @@ import android.util.Log;
 import com.arellomobile.mvp.InjectViewState;
 import com.cloudring.arrobot.gelin.MainApplication;
 import com.cloudring.arrobot.gelin.base.BasePresenter;
+import com.cloudring.arrobot.gelin.contentdb.AppInfo;
+import com.cloudring.arrobot.gelin.contentdb.AppInfoDao;
 import com.cloudring.arrobot.gelin.download.Check;
 import com.cloudring.arrobot.gelin.download.NetworkClient;
 import com.cloudring.arrobot.gelin.download.NetworkUtil;
 import com.cloudring.arrobot.gelin.manager.PRClient;
+import com.cloudring.arrobot.gelin.mvp.modle.AppItem;
 import com.cloudring.arrobot.gelin.mvp.network.APIService;
 import com.cloudring.arrobot.gelin.mvp.network.APIUtils;
 import com.cloudring.arrobot.gelin.mvp.network.request.GetAppListByTypeRequest;
 import com.cloudring.arrobot.gelin.mvp.network.response.GetListAppByTypeIdResponse;
 
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import retrofit2.Call;
@@ -53,8 +58,16 @@ public class ResultPresenter extends BasePresenter<ResultView> {
                     {
                         PRClient.getInstance().setApkResultList(response.body().data.apkList);
                     }
-//                    getViewState().refreshList("","","");
-                    getViewState().refreshList(response.body().data.apkList);
+                    //过滤已在数据库保存的数据
+                    List<AppItem> list = new ArrayList<>();
+                    if (response.body().data.apkList.size() > 0){
+                        for (AppItem item : response.body().data.apkList){
+                            if (AppInfoDao.getByFileName(item.getFileName()) == null){
+                                list.add(item);
+                            }
+                        }
+                    }
+                    getViewState().refreshList(list);
                 }else {
                     getViewState().loadFail();
                     if(response.body().message!=null)

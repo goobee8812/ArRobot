@@ -3,8 +3,10 @@ package com.cloudring.arrobot.gelin.mvp.mine;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.constraint.solver.GoalRow;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -17,8 +19,10 @@ import com.cloudring.arrobot.gelin.R;
 import com.cloudring.arrobot.gelin.adapter.AppAdapter;
 import com.cloudring.arrobot.gelin.adapter.ListAdapter;
 import com.cloudring.arrobot.gelin.adapter.OnItemClickCallback;
+import com.cloudring.arrobot.gelin.contentdb.AppInfo;
 import com.cloudring.arrobot.gelin.mvp.modle.AppItem;
 import com.cloudring.arrobot.gelin.utils.GlobalUtil;
+import com.cloudring.arrobot.gelin.utils.LogUtil;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -48,11 +52,13 @@ public class MineActivity extends MvpAppCompatActivity implements MineView {
     private List<String> itemListData;
 
     private static String type = "";
+    private static String categoryType = "";
 
     @InjectPresenter
     public MinePresenter mPresenter;
 
     private static final int REFRESH_DATA = 0x001;      //刷新数据
+    private int currentPosition = 0;
 
     private MyHandler myHandler = new MyHandler(this);
 
@@ -69,8 +75,8 @@ public class MineActivity extends MvpAppCompatActivity implements MineView {
             if (activity != null) {
                 switch (msg.what) {
                     case REFRESH_DATA:
-                        activity.normalAdapter.notifyDataSetChanged();
-                        Toast.makeText(activity, "更新数据", Toast.LENGTH_SHORT).show();
+                        activity.normalAdapter.setDataChanged(activity.normalListData);
+//                        Toast.makeText(activity, "更新数据", Toast.LENGTH_SHORT).show();
                         break;
                     default:
                         break;
@@ -95,8 +101,7 @@ public class MineActivity extends MvpAppCompatActivity implements MineView {
         initItemData();
         normalAdapter = new AppAdapter(normalListData, new OnItemClickCallback<AppItem>() {
             @Override
-            public void onClick(View view, AppItem info) {
-                Toast.makeText(MineActivity.this, "点击了下载" + info.getId(), Toast.LENGTH_SHORT).show();
+            public void onClick(View view, AppItem info,int position) {
                 if (type.equals(GlobalUtil.INTENT_TYPE_GAME)){
                     //在我的游戏界面
                 }else if (type.equals(GlobalUtil.INTENT_TYPE_COLLECTION)){
@@ -107,15 +112,24 @@ public class MineActivity extends MvpAppCompatActivity implements MineView {
         }, new OnItemClickCallback<AppItem>() {
 
             @Override
-            public void onClick(View view, AppItem info) {
+            public void onClick(View view, AppItem info,int position) {
                 Toast.makeText(MineActivity.this, "点击了收藏" + info.getId(), Toast.LENGTH_SHORT).show();
             }
         });
 
         listAdapter = new ListAdapter(this, itemListData, new OnItemClickCallback<String>() {
             @Override
-            public void onClick(View view, String info) {
-                Toast.makeText(MineActivity.this, "点击了" + info.toString(), Toast.LENGTH_SHORT).show();
+            public void onClick(View view, String info,int position) {
+                if (currentPosition == position) return;
+//                Toast.makeText(MineActivity.this, "点击了" + info.toString(), Toast.LENGTH_SHORT).show();
+//                LogUtil.LogShow("Position:" + position,LogUtil.DEBUG);
+
+                currentPosition = position;
+                if (position == 0){
+                    mPresenter.getMineData(categoryType);
+                }else {
+                    mPresenter.getMineCategoryData(categoryType,getCategoryId(position));
+                }
             }
         });
         itemList.setAdapter(listAdapter);
@@ -123,9 +137,11 @@ public class MineActivity extends MvpAppCompatActivity implements MineView {
             type = getIntent().getStringExtra(GlobalUtil.INTENT_TYPE_KEY);
             if (type.equals(GlobalUtil.INTENT_TYPE_GAME)){
                 normalAdapter.setType(1);
+                categoryType  = GlobalUtil.CATEGORY_TYPE_MY_GAME;
                 titleTv.setText("我的游戏");
             }else if (type.equals(GlobalUtil.INTENT_TYPE_COLLECTION)){
                 titleTv.setText("我的收藏");
+                categoryType  = GlobalUtil.CATEGORY_TYPE_COLLECTION;
                 normalAdapter.setType(2);
             }
         }
@@ -160,7 +176,7 @@ public class MineActivity extends MvpAppCompatActivity implements MineView {
         normalRecycler.setLayoutManager(gridLayoutManager);
         normalRecycler.setAdapter(normalAdapter);
 
-        mPresenter.getNormalList("","",MineActivity.this);
+        mPresenter.getMineData(categoryType);
     }
 
     @Override
@@ -179,8 +195,8 @@ public class MineActivity extends MvpAppCompatActivity implements MineView {
     }
 
     @Override
-    public void refreshList(String bookCount, String acount, String time) {
-        initNormalData();
+    public void refreshList(List<AppItem> list) {
+        normalListData = list;
         myHandler.sendEmptyMessage(REFRESH_DATA);
     }
 
@@ -192,6 +208,26 @@ public class MineActivity extends MvpAppCompatActivity implements MineView {
                 break;
             default:
                 break;
+        }
+    }
+
+    private String getCategoryId(int request){
+        if (request == 1){
+            return "54";
+        }else if (request == 2){
+            return "51";
+        }else if (request == 3){
+            return "52";
+        }else if (request == 4){
+            return "66";
+        }else if (request == 5){
+            return "67";
+        }else if (request == 6){
+            return "68";
+        }else if (request == 7){
+            return "69";
+        }else {
+            return "";
         }
     }
 }

@@ -24,4 +24,10 @@ public class GlobalUtil {
     public static String CATEGORY_TYPE_MATH = "67";
     public static String CATEGORY_TYPE_COGNITION = "68";
     public static String CATEGORY_TYPE_LOGIC = "69";
+
+
+    public static String CATEGORY_TYPE_COLLECTION= "2";
+    public static String CATEGORY_TYPE_MY_GAME = "1";
+
+
 }
