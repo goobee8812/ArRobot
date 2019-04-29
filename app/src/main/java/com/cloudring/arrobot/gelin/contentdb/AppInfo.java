@@ -10,7 +10,6 @@ public class AppInfo extends BaseModel {
 
     @PrimaryKey(autoincrement = true)
     private int autoId;
-
     @Column
     private String id;
     @Column
@@ -21,6 +20,10 @@ public class AppInfo extends BaseModel {
     private String type;  // 0:more  1：我的游戏  2：收藏
     @Column
     private String packageName;  //包名
+    @Column
+    private String icon1;  //图片路径
+    @Column
+    private String topCategoryId;  //包名
 
     public int getAutoId() {
         return autoId;
@@ -68,5 +71,21 @@ public class AppInfo extends BaseModel {
 
     public void setPackageName(String packageName) {
         this.packageName = packageName;
+    }
+
+    public String getIcon1() {
+        return icon1;
+    }
+
+    public void setIcon1(String icon1) {
+        this.icon1 = icon1;
+    }
+
+    public String getTopCategoryId() {
+        return topCategoryId;
+    }
+
+    public void setTopCategoryId(String topCategoryId) {
+        this.topCategoryId = topCategoryId;
     }
 }

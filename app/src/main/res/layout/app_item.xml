@@ -9,7 +9,6 @@
         android:id="@+id/id_img"
         android:layout_width="@dimen/DIMEN_180DP"
         android:layout_height="@dimen/DIMEN_180DP"
-        android:background="@drawable/ar_robot_img_default"
         />
     <TextView
         android:id="@+id/id_name_tv"

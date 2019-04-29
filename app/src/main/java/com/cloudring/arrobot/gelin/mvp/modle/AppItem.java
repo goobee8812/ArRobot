@@ -41,7 +41,15 @@ public class AppItem {
 
     @JSONField(ordinal = 9)
     @SerializedName("semester")
-        private String semester;  //APP
+    private String semester;  //APP
+
+    @JSONField(ordinal = 10)
+    @SerializedName("icon1")
+    private String icon1;  //APP
+
+    @JSONField(ordinal = 11)
+    @SerializedName("topCategoryId")
+    private String topCategoryId;  //topCategoryId
 
     @SerializedName("packageName")
     private String packageName;  //APP 包名
@@ -54,10 +62,12 @@ public class AppItem {
         this.fileName = fileName;
     }
 
-    public AppItem(String id, String fileName,String packageName) {
+    public AppItem(String id, String fileName,String packageName,String icon1,String topCategoryId) {
         this.id = id;
         this.fileName = fileName;
         this.packageName = packageName;
+        this.icon1 = icon1;
+        this.topCategoryId = topCategoryId;
     }
 
     public String getId() {
@@ -146,6 +156,22 @@ public class AppItem {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public String getIcon1() {
+        return icon1;
+    }
+
+    public void setIcon1(String icon1) {
+        this.icon1 = icon1;
+    }
+
+    public String getTopCategoryId() {
+        return topCategoryId;
+    }
+
+    public void setTopCategoryId(String topCategoryId) {
+        this.topCategoryId = topCategoryId;
     }
 
     @Override

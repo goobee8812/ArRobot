@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.cloudring.arrobot.gelin.R;
 import com.cloudring.arrobot.gelin.mvp.modle.AppItem;
+import com.cloudring.arrobot.gelin.utils.imageloader.ImageUtils;
 
 
 import java.util.List;
@@ -66,7 +67,7 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> {
             holder.collectionStr.setVisibility(View.GONE);
             holder.downloadStr.setText("下载");
         }
-
+        ImageUtils.getInstance().display(holder.appImg,item.getIcon1(),R.drawable.ar_robot_img_default,R.drawable.ar_robot_img_default);
         holder.downloadStr.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

@@ -26,7 +26,7 @@ public class MinePresenter extends BasePresenter<MineView> {
         List<AppItem> appItems = new ArrayList<>();
         if (list.size() > 0){
             for (AppInfo info : list){
-                AppItem appItem = new AppItem(info.getId(),info.getFileName(),info.getPackageName());
+                AppItem appItem = new AppItem(info.getId(),info.getFileName(),info.getPackageName(),info.getIcon1(),info.getTopCategoryId());
                 appItems.add(appItem);
             }
         }
@@ -41,7 +41,7 @@ public class MinePresenter extends BasePresenter<MineView> {
         List<AppItem> appItems = new ArrayList<>();
         if (list.size() > 0){
             for (AppInfo info : list){
-                AppItem appItem = new AppItem(info.getId(),info.getFileName(),info.getPackageName());
+                AppItem appItem = new AppItem(info.getId(),info.getFileName(),info.getPackageName(),info.getIcon1(),info.getTopCategoryId());
                 appItems.add(appItem);
             }
         }

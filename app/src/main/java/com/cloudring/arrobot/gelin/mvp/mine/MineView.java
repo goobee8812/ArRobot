@@ -13,7 +13,5 @@ public interface MineView extends MvpView{
 
     void loadFail();
 
-
     void refreshList(List<AppItem> list);   //刷新列表
-
 }

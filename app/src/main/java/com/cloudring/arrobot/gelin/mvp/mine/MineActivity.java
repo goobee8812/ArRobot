@@ -76,7 +76,6 @@ public class MineActivity extends MvpAppCompatActivity implements MineView {
                 switch (msg.what) {
                     case REFRESH_DATA:
                         activity.normalAdapter.setDataChanged(activity.normalListData);
-//                        Toast.makeText(activity, "更新数据", Toast.LENGTH_SHORT).show();
                         break;
                     default:
                         break;
@@ -107,7 +106,6 @@ public class MineActivity extends MvpAppCompatActivity implements MineView {
                 }else if (type.equals(GlobalUtil.INTENT_TYPE_COLLECTION)){
                     //在我的收藏界面
                 }
-
             }
         }, new OnItemClickCallback<AppItem>() {
 
@@ -121,9 +119,6 @@ public class MineActivity extends MvpAppCompatActivity implements MineView {
             @Override
             public void onClick(View view, String info,int position) {
                 if (currentPosition == position) return;
-//                Toast.makeText(MineActivity.this, "点击了" + info.toString(), Toast.LENGTH_SHORT).show();
-//                LogUtil.LogShow("Position:" + position,LogUtil.DEBUG);
-
                 currentPosition = position;
                 if (position == 0){
                     mPresenter.getMineData(categoryType);

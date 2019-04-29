@@ -56,7 +56,7 @@ public class AppInfoDao {
     public static List<AppInfo> getCategoryAppList(String type, String CategoryId) {
         OperatorGroup op = OperatorGroup.clause(OperatorGroup.clause()
                 .and(AppInfo_Table.type.eq(type))
-                .and(AppInfo_Table.categoryId.eq(CategoryId)));
+                .and(AppInfo_Table.topCategoryId.eq(CategoryId)));
         return new Select().from(AppInfo.class).where(op).queryList();
     }
 

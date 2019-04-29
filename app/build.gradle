@@ -12,10 +12,63 @@ android {
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
-    buildTypes {
+    signingConfigs {
         release {
+            storeFile file("../A33.jks")
+            storePassword '147258'
+            keyAlias 'aliasa33.jks'
+            keyPassword '147258'
+        }
+        debug {
+            storeFile file("../A33.jks")
+            storePassword '147258'
+            keyAlias 'aliasa33.jks'
+            keyPassword '147258'
+        }
+
+//        release {
+//            storeFile file("../3128.jks")
+//            storePassword '147258'
+//            keyAlias 'alias3368.jks'
+//            keyPassword '147258'
+//        }
+//
+//        debug {
+//            storeFile file("../3128.jks")
+//            storePassword '147258'
+//            keyAlias 'alias3368.jks'
+//            keyPassword '147258'
+//        }
+
+
+    }
+
+    buildTypes {
+        debug {
+            debuggable true
+            jniDebuggable true
+            zipAlignEnabled false
             minifyEnabled false
+            shrinkResources false
+            signingConfig signingConfigs.release
+
+        }
+        release {
+            debuggable false
+            jniDebuggable false
+            zipAlignEnabled true
+            minifyEnabled false
+            shrinkResources false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+            android.applicationVariants.all {
+                variant ->
+                    variant.outputs.all {
+                        output ->
+                            def fileName = "TestArRobot.apk"
+                            outputFileName = fileName
+                    }
+            }
         }
     }
     compileOptions {

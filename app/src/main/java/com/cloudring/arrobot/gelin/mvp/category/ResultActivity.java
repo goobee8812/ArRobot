@@ -1,9 +1,13 @@
 package com.cloudring.arrobot.gelin.mvp.category;
 
+import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -29,6 +33,7 @@ import com.cloudring.arrobot.gelin.manager.PRClient;
 import com.cloudring.arrobot.gelin.mvp.modle.AppItem;
 import com.cloudring.arrobot.gelin.utils.GlobalUtil;
 import com.cloudring.arrobot.gelin.utils.LogUtil;
+import com.cloudring.arrobot.gelin.utils.WaitDialog;
 import com.getlearn.library.GetLearnSdk;
 import com.getlearn.library.Interface.OnApkInstallListener;
 import com.getlearn.library.Interface.OnUrlListener;
@@ -44,7 +49,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class ResultActivity extends MvpAppCompatActivity implements ResultView{
+public class ResultActivity extends MvpAppCompatActivity implements ResultView {
 
 
     @BindView(R.id.id_normal_recycler_view)
@@ -76,8 +81,10 @@ public class ResultActivity extends MvpAppCompatActivity implements ResultView{
     private static final int REFRESH_ITEM = 0x003;      //个别刷新
 
     private MyHandler myHandler = new MyHandler(this);
+
     static class MyHandler extends Handler {
         WeakReference<ResultActivity> mActivityReference;
+
         MyHandler(ResultActivity activity) {
             mActivityReference = new WeakReference<>(activity);
         }
@@ -86,16 +93,15 @@ public class ResultActivity extends MvpAppCompatActivity implements ResultView{
         public void handleMessage(Message msg) {
             final ResultActivity activity = mActivityReference.get();
             if (activity != null) {
-                switch (msg.what){
+                switch (msg.what) {
                     case REFRESH_DATA:
                         activity.normalAdapter.setDataChanged(activity.normalList);
                         activity.hotAdapter.notifyDataSetChanged();
                         Toast.makeText(activity, "更新数据" + activity.normalList.get(0).getFileName(), Toast.LENGTH_SHORT).show();
                         break;
                     case START_DOWNLOAD:
-                        String url = (String)msg.obj;
-                        activity.downFile(url);
-//                        activity.downFile(activity.test);
+                        String url = (String) msg.obj;
+                        activity.downFile(url, activity);
                         break;
                     case REFRESH_ITEM:
                         break;
@@ -105,7 +111,6 @@ public class ResultActivity extends MvpAppCompatActivity implements ResultView{
             }
         }
     }
-
 
 
     @Override
@@ -120,18 +125,19 @@ public class ResultActivity extends MvpAppCompatActivity implements ResultView{
         mGetLearnSdk.setOnApkInstallListener(new OnApkInstallListener() {
             @Override
             public void sdkSetApkInsta(String s) {
-                LogUtil.LogShow("安装结果是：" + s,LogUtil.DEBUG);
-                if (s.equals("0")){
+                LogUtil.LogShow("安装结果是：" + s, LogUtil.DEBUG);
+                if (s.equals("0")) {
                     //安装成功，写入数据库
                 }
+                waitDialog.dismiss();
             }
         });
         //url回调
         mGetLearnSdk.setOnUrlListener(new OnUrlListener() {
             @Override
             public void sdkGetTempUrl(String s, String s1, String s2, String s3) {
-                LogUtil.LogShow("状态码："+ s + "，资源地址：" + s2,LogUtil.DEBUG);
-                if (s.equals("0")){
+                LogUtil.LogShow("状态码：" + s + "，资源地址：" + s2, LogUtil.DEBUG);
+                if (s.equals("0")) {
                     Message message = Message.obtain();
                     message.what = START_DOWNLOAD;
                     message.obj = s2;
@@ -143,19 +149,19 @@ public class ResultActivity extends MvpAppCompatActivity implements ResultView{
 
     private void initData() {
         titleMap = new HashMap<>();
-        titleMap.put(GlobalUtil.INTENT_TYPE_JIYI,"记忆");
-        titleMap.put(GlobalUtil.INTENT_TYPE_QINGSHANG,"情商");
-        titleMap.put(GlobalUtil.INTENT_TYPE_HOBBY,"习惯");
-        titleMap.put(GlobalUtil.INTENT_TYPE_LANGUAGE,"语言");
-        titleMap.put(GlobalUtil.INTENT_TYPE_MATH,"数理");
-        titleMap.put(GlobalUtil.INTENT_TYPE_COGNITION,"认知");
-        titleMap.put(GlobalUtil.INTENT_TYPE_LOGIC,"逻辑");
+        titleMap.put(GlobalUtil.INTENT_TYPE_JIYI, "记忆");
+        titleMap.put(GlobalUtil.INTENT_TYPE_QINGSHANG, "情商");
+        titleMap.put(GlobalUtil.INTENT_TYPE_HOBBY, "习惯");
+        titleMap.put(GlobalUtil.INTENT_TYPE_LANGUAGE, "语言");
+        titleMap.put(GlobalUtil.INTENT_TYPE_MATH, "数理");
+        titleMap.put(GlobalUtil.INTENT_TYPE_COGNITION, "认知");
+        titleMap.put(GlobalUtil.INTENT_TYPE_LOGIC, "逻辑");
 
-        if (getIntent().hasExtra(GlobalUtil.INTENT_TYPE_KEY)){
+        if (getIntent().hasExtra(GlobalUtil.INTENT_TYPE_KEY)) {
             type = getIntent().getStringExtra(GlobalUtil.INTENT_TYPE_KEY);
-            if (titleMap.get(type) != null){
+            if (titleMap.get(type) != null) {
                 titleTv.setText(titleMap.get(type));
-            }else {
+            } else {
                 titleTv.setText("");
             }
         }
@@ -163,19 +169,22 @@ public class ResultActivity extends MvpAppCompatActivity implements ResultView{
         hotList = new ArrayList<>();
         normalAdapter = new AppAdapter(normalList, new OnItemClickCallback<AppItem>() {
             @Override
-            public void onClick(View view, AppItem info,int position) {
+            public void onClick(View view, AppItem info, int position) {
                 Toast.makeText(ResultActivity.this, "点击了下载" + info.getId(), Toast.LENGTH_SHORT).show();
-                mGetLearnSdk.getResUrl(ResultActivity.this,info.getId());
+                mGetLearnSdk.getResUrl(ResultActivity.this, info.getId());
             }
         }, new OnItemClickCallback<AppItem>() {
             @Override
-            public void onClick(View view, AppItem info,int position) {
-                Toast.makeText(ResultActivity.this, "点击了收藏" + info.getId(), Toast.LENGTH_SHORT).show();
+            public void onClick(View view, AppItem info, int position) {
                 AppInfo appInfo = new AppInfo();
+
                 appInfo.setId(info.getId());
                 appInfo.setCategoryId(info.getCategoryId());
                 appInfo.setFileName(info.getFileName());
+                appInfo.setTopCategoryId(info.getTopCategoryId());
+                appInfo.setIcon1(info.getIcon1());
                 appInfo.setType("2");
+
                 AppInfoDao.add(appInfo);
                 //删掉数据
                 normalList.remove(position);
@@ -184,46 +193,51 @@ public class ResultActivity extends MvpAppCompatActivity implements ResultView{
                 if (position != normalList.size()) {
                     normalAdapter.notifyItemRangeChanged(position, normalList.size() - position);
                 }
+
             }
         });
         hotAdapter = new AppAdapter(hotList, new OnItemClickCallback<AppItem>() {
             @Override
-            public void onClick(View view, AppItem info,int position) {
+            public void onClick(View view, AppItem info, int position) {
                 Toast.makeText(ResultActivity.this, "点击了下载" + info.getId(), Toast.LENGTH_SHORT).show();
+                if (waitDialog == null){
+                    waitDialog = new WaitDialog(ResultActivity.this);
+                }
+                waitDialog.show();
             }
         }, new OnItemClickCallback<AppItem>() {
 
             @Override
-            public void onClick(View view, AppItem info,int position) {
+            public void onClick(View view, AppItem info, int position) {
                 Toast.makeText(ResultActivity.this, "点击了收藏" + info.getId(), Toast.LENGTH_SHORT).show();
             }
         });
-        mPresenter.getNormalList(getRequestType(type),this);
+        mPresenter.getNormalList(getRequestType(type), this);
     }
 
     private void initHotData() {
-        hotList.add(new AppItem("001","www.ww.ww.www"));
-        hotList.add(new AppItem("002","www.ww.ww.www"));
-        hotList.add(new AppItem("003","www.ww.ww.www"));
-        hotList.add(new AppItem("004","www.ww.ww.www"));
-        hotList.add(new AppItem("005","www.ww.ww.www"));
+        hotList.add(new AppItem("001", "www.ww.ww.www"));
+        hotList.add(new AppItem("002", "www.ww.ww.www"));
+        hotList.add(new AppItem("003", "www.ww.ww.www"));
+        hotList.add(new AppItem("004", "www.ww.ww.www"));
+        hotList.add(new AppItem("005", "www.ww.ww.www"));
     }
 
     private void initNormalData() {
         //测试
-        normalList.add(new AppItem("001","www.baidu.com"));
-        normalList.add(new AppItem("002","www.baidu.com"));
-        normalList.add(new AppItem("003","www.baidu.com"));
-        normalList.add(new AppItem("004","www.baidu.com"));
-        normalList.add(new AppItem("005","www.baidu.com"));
-        normalList.add(new AppItem("006","www.baidu.com"));
-        normalList.add(new AppItem("007","www.baidu.com"));
-        normalList.add(new AppItem("008","www.baidu.com"));
-        normalList.add(new AppItem("009","www.baidu.com"));
+        normalList.add(new AppItem("001", "www.baidu.com"));
+        normalList.add(new AppItem("002", "www.baidu.com"));
+        normalList.add(new AppItem("003", "www.baidu.com"));
+        normalList.add(new AppItem("004", "www.baidu.com"));
+        normalList.add(new AppItem("005", "www.baidu.com"));
+        normalList.add(new AppItem("006", "www.baidu.com"));
+        normalList.add(new AppItem("007", "www.baidu.com"));
+        normalList.add(new AppItem("008", "www.baidu.com"));
+        normalList.add(new AppItem("009", "www.baidu.com"));
     }
 
     private void initView() {
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(this,4);
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 4);
         normalRecycler.setLayoutManager(gridLayoutManager);
         normalRecycler.setAdapter(normalAdapter);
 
@@ -240,7 +254,6 @@ public class ResultActivity extends MvpAppCompatActivity implements ResultView{
 
     @Override
     public void showMsg(int msg) {
-
     }
 
     @Override
@@ -269,7 +282,7 @@ public class ResultActivity extends MvpAppCompatActivity implements ResultView{
 
     @OnClick({R.id.id_back_iv})
     public void onClickEvent(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.id_back_iv:
                 finish();
                 break;
@@ -278,28 +291,27 @@ public class ResultActivity extends MvpAppCompatActivity implements ResultView{
         }
     }
 
-    private Map<String,String> titleMap;
+    private Map<String, String> titleMap;
 
-    private String getRequestType(String request){
-        if (request.equals(GlobalUtil.INTENT_TYPE_JIYI)){
+    private String getRequestType(String request) {
+        if (request.equals(GlobalUtil.INTENT_TYPE_JIYI)) {
             return "54";
-        }else if (request.equals(GlobalUtil.INTENT_TYPE_QINGSHANG)){
+        } else if (request.equals(GlobalUtil.INTENT_TYPE_QINGSHANG)) {
             return "51";
-        }else if (request.equals(GlobalUtil.INTENT_TYPE_HOBBY)){
+        } else if (request.equals(GlobalUtil.INTENT_TYPE_HOBBY)) {
             return "52";
-        }else if (request.equals(GlobalUtil.INTENT_TYPE_LANGUAGE)){
+        } else if (request.equals(GlobalUtil.INTENT_TYPE_LANGUAGE)) {
             return "66";
-        }else if (request.equals(GlobalUtil.INTENT_TYPE_MATH)){
+        } else if (request.equals(GlobalUtil.INTENT_TYPE_MATH)) {
             return "67";
-        }else if (request.equals(GlobalUtil.INTENT_TYPE_COGNITION)){
+        } else if (request.equals(GlobalUtil.INTENT_TYPE_COGNITION)) {
             return "68";
-        }else if (request.equals(GlobalUtil.INTENT_TYPE_LOGIC)){
+        } else if (request.equals(GlobalUtil.INTENT_TYPE_LOGIC)) {
             return "69";
-        }else {
+        } else {
             return "";
         }
     }
-
 
 
     UniversalDialog noticeDialog;
@@ -308,11 +320,11 @@ public class ResultActivity extends MvpAppCompatActivity implements ResultView{
 
     private boolean isDown = false;
     private String mFilpath = null;
+
     /**
      * 文件下载
-     *
      */
-    public void downFile(String downloadUrl) {
+    public void downFile(String downloadUrl, Context context) {
         if (downloadUrl == null || downloadUrl.equals("")) {
             return;
         }
@@ -348,7 +360,6 @@ public class ResultActivity extends MvpAppCompatActivity implements ResultView{
         String path = FileHelper.getDownloadApkCachePath();
         String name = getString(R.string.download_apkname, "test");
 
-
         final String apkPath = path + name;
         mFilpath = apkPath;
         DownloadUtil.get().download(downloadUrl
@@ -358,26 +369,26 @@ public class ResultActivity extends MvpAppCompatActivity implements ResultView{
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
+                                if (noticeDialog != null) {
+                                    noticeDialog.dismiss();
+                                    noticeDialog = null;
 
-                                runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        if (noticeDialog != null) {
-                                            noticeDialog.dismiss();
-                                            noticeDialog = null;
-                                        }
+                                    if(waitDialog == null){
+                                        waitDialog =  new WaitDialog(ResultActivity.this);
                                     }
-                                });
-
+                                    waitDialog.show();
+                                }
                             }
                         });
                         //下载完成进行相关逻辑操作
                         isDown = false;
                         mFilpath = "";
                         //需要调用格林的安装方式
-                        LogUtil.LogShow("安装的apk:" + name,LogUtil.DEBUG);
-                        mGetLearnSdk.setApkInstall(ResultActivity.this,path,name);
-//                        install(file);
+                        Log.e("ApkINs", String.valueOf(Environment.getExternalStorageDirectory().getAbsolutePath()));
+
+                        LogUtil.LogShow("安装的apk:" + name + "__路径：" + path, LogUtil.DEBUG);
+
+                        mGetLearnSdk.setApkInstall(ResultActivity.this, path, name);
                     }
 
                     @Override
@@ -392,7 +403,6 @@ public class ResultActivity extends MvpAppCompatActivity implements ResultView{
                                 progress_persent.setText(progress + "/100");
                             }
                         });
-
                     }
 
                     @Override
@@ -403,6 +413,7 @@ public class ResultActivity extends MvpAppCompatActivity implements ResultView{
                         boolean isdelete = Utils.deleteAPKExists(apkPath);
                     }
                 });
-
     }
+
+    private WaitDialog waitDialog;
 }
