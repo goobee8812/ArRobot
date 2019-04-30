@@ -57,6 +57,9 @@ public class AppItem {
     @SerializedName("type")
     private String type;  //APP 0：默认  1：已下载  2：收藏
 
+    @SerializedName("recommended")
+    private String recommended;
+
     public AppItem(String id, String fileName) {
         this.id = id;
         this.fileName = fileName;
@@ -173,6 +176,15 @@ public class AppItem {
     public void setTopCategoryId(String topCategoryId) {
         this.topCategoryId = topCategoryId;
     }
+
+    public String getRecommended(){
+        return recommended;
+    }
+
+    public void setRecommended(String recommended){
+        this.recommended = recommended;
+    }
+
 
     @Override
     public String toString() {

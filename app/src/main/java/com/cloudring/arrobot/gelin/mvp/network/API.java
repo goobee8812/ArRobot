@@ -15,6 +15,9 @@ public class API {
         //获取Apk列表
         public static final String REQUEST_MARKET_LISTAPP = "cloudring-property-mobile-web/geling/gelingApkList";
 
+        //获取主页的游戏分类列表
+        public static final String REQUEST_TYPE_LIST = "cloudring-property-mobile-web/geling/1.0/gelingCategory";
+
         //获取视频专辑
         public static final String REQUEST_ALBUM_LIST = "cloudring-property-mobile-web/iqiyi/selectQqvideoByCategoryVersion";
 

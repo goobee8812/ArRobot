@@ -1,13 +1,11 @@
 package com.cloudring.arrobot.gelin.mvp.category;
 
-import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -31,6 +29,8 @@ import com.cloudring.arrobot.gelin.download.Utils;
 import com.cloudring.arrobot.gelin.download.test.DownloadUtil;
 import com.cloudring.arrobot.gelin.manager.PRClient;
 import com.cloudring.arrobot.gelin.mvp.modle.AppItem;
+import com.cloudring.arrobot.gelin.mvp.modle.MainType;
+import com.cloudring.arrobot.gelin.utils.ContantsUtil;
 import com.cloudring.arrobot.gelin.utils.GlobalUtil;
 import com.cloudring.arrobot.gelin.utils.LogUtil;
 import com.cloudring.arrobot.gelin.utils.WaitDialog;
@@ -41,7 +41,6 @@ import com.getlearn.library.Interface.OnUrlListener;
 import java.io.File;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -81,6 +80,7 @@ public class ResultActivity extends MvpAppCompatActivity implements ResultView {
     private static final int REFRESH_ITEM = 0x003;      //个别刷新
 
     private MyHandler myHandler = new MyHandler(this);
+    private MainType mainType;
 
     static class MyHandler extends Handler {
         WeakReference<ResultActivity> mActivityReference;
@@ -148,7 +148,7 @@ public class ResultActivity extends MvpAppCompatActivity implements ResultView {
     }
 
     private void initData() {
-        titleMap = new HashMap<>();
+        /*titleMap = new HashMap<>();
         titleMap.put(GlobalUtil.INTENT_TYPE_JIYI, "记忆");
         titleMap.put(GlobalUtil.INTENT_TYPE_QINGSHANG, "情商");
         titleMap.put(GlobalUtil.INTENT_TYPE_HOBBY, "习惯");
@@ -164,9 +164,13 @@ public class ResultActivity extends MvpAppCompatActivity implements ResultView {
             } else {
                 titleTv.setText("");
             }
-        }
-        normalList = new ArrayList<>();
+        }*/
+        //主界面分类对象
+        mainType = (MainType) getIntent().getSerializableExtra(ContantsUtil.MAIN_TYPE);
+        String categroyName = mainType.getCategroyName();
+        titleTv.setText(categroyName);
         hotList = new ArrayList<>();
+        normalList = new ArrayList<>();
         normalAdapter = new AppAdapter(normalList, new OnItemClickCallback<AppItem>() {
             @Override
             public void onClick(View view, AppItem info, int position) {
@@ -212,15 +216,28 @@ public class ResultActivity extends MvpAppCompatActivity implements ResultView {
                 Toast.makeText(ResultActivity.this, "点击了收藏" + info.getId(), Toast.LENGTH_SHORT).show();
             }
         });
-        mPresenter.getNormalList(getRequestType(type), this);
+        mPresenter.getNormalList(mainType.getCategroyId(), this);
     }
 
-    private void initHotData() {
-        hotList.add(new AppItem("001", "www.ww.ww.www"));
+    private void initHotData(List<AppItem> normalList){
+        if(hotList != null){
+            hotList.clear();
+        }
+        for(int i = 0; i < normalList.size(); i++){
+            String recommended = normalList.get(i).getRecommended();
+            int parseInt = Integer.parseInt(recommended);
+            if(parseInt > 0){
+                hotList.add(normalList.get(i));
+            }
+        }
+        if(hotList.size() == 0 && normalList.size() >= 1){
+            hotList.add(normalList.get(0));
+        }
+        /*hotList.add(new AppItem("001", "www.ww.ww.www"));
         hotList.add(new AppItem("002", "www.ww.ww.www"));
         hotList.add(new AppItem("003", "www.ww.ww.www"));
         hotList.add(new AppItem("004", "www.ww.ww.www"));
-        hotList.add(new AppItem("005", "www.ww.ww.www"));
+        hotList.add(new AppItem("005", "www.ww.ww.www"));*/
     }
 
     private void initNormalData() {
@@ -269,14 +286,14 @@ public class ResultActivity extends MvpAppCompatActivity implements ResultView {
         Log.d("Test", "refreshList: " + normalList.get(0).getFileName());
 //        initNormalData();
         Log.d("Test", "refreshList: " + normalList.size());
-        initHotData();
+        initHotData(normalList);
         myHandler.sendEmptyMessage(REFRESH_DATA);
     }
 
     @Override
     public void refreshList(List<AppItem> list) {
         normalList = list;
-        initHotData();
+        initHotData(normalList);
         myHandler.sendEmptyMessage(REFRESH_DATA);
     }
 

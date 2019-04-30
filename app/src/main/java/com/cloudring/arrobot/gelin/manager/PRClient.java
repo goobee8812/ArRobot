@@ -1,36 +1,18 @@
 package com.cloudring.arrobot.gelin.manager;
 
-import android.accounts.Account;
-import android.annotation.TargetApi;
 import android.content.Context;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.support.annotation.RequiresApi;
-import android.util.Log;
 
-
-import com.cloudring.arrobot.gelin.MainApplication;
-import com.cloudring.arrobot.gelin.download.NetworkClient;
-import com.cloudring.arrobot.gelin.download.NetworkUtil;
 import com.cloudring.arrobot.gelin.mvp.modle.AppItem;
-import com.cloudring.arrobot.gelin.mvp.network.APIService;
-import com.cloudring.arrobot.gelin.mvp.network.APIUtils;
+import com.cloudring.arrobot.gelin.mvp.modle.MainType;
 import com.cloudring.arrobot.gelin.utils.LogUtil;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.TimeUnit;
-
-import io.reactivex.Observable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.disposables.Disposable;
 
 
 /**
@@ -258,6 +240,16 @@ public class PRClient implements PRListener, PRInterface {
 
     public List<AppItem> getApkResultList() {
         return apkResultList;
+    }
+
+    private List<MainType> typeList = new ArrayList<>();
+
+    public void setTypeResultList(List<MainType> apkResultList){
+        this.typeList = apkResultList;
+    }
+
+    public List<MainType> getTypeResultList(){
+        return typeList;
     }
 
 //    /************获取今日推荐***********/
