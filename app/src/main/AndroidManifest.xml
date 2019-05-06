@@ -70,6 +70,7 @@
             android:exported="true"
             android:launchMode="singleTask"
             android:screenOrientation="landscape"
-            android:theme="@style/AppTheme.Fullscreen.MagicLamp" />
+            android:theme="@style/AppTheme.Fullscreen.MagicLamp"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden" />
     </application>
 </manifest>

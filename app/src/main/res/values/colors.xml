@@ -5,4 +5,5 @@
     <color name="colorAccent">#FF4081</color>
     <color name="et_hint">#a0bef4</color>
     <color name="white">#a0bef4</color>
+    <color name="whitef">#ffffff</color>
 </resources>

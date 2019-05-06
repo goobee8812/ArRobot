@@ -151,6 +151,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="55dp"
         android:text="15:49"
+        android:visibility="invisible"
         android:textColor="#fff"
         android:textSize="36sp"
         app:layout_constraintEnd_toEndOf="@+id/id_search_iv"

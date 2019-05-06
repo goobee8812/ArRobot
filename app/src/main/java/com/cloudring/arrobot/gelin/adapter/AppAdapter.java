@@ -11,7 +11,7 @@ import com.cloudring.arrobot.gelin.R;
 import com.cloudring.arrobot.gelin.mvp.modle.AppItem;
 import com.cloudring.arrobot.gelin.utils.imageloader.ImageUtils;
 
-
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -19,7 +19,7 @@ import java.util.List;
  */
 public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> {
 
-    private List<AppItem> mAppList;
+    private List<AppItem> mAppList = new ArrayList<>();
 
     private int type = 0; //0：默认  1：打开游戏  2：下载游戏
 
@@ -43,7 +43,7 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> {
         if (this.mAppList != null){
             this.mAppList.clear();
         }
-        this.mAppList = list;
+        mAppList.addAll(list);
         notifyDataSetChanged();
     }
 

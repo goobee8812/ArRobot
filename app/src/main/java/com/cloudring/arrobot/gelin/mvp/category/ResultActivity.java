@@ -70,6 +70,8 @@ public class ResultActivity extends MvpAppCompatActivity implements ResultView {
 
     private GetLearnSdk mGetLearnSdk;
 
+    private AppInfo appInfo1 = new AppInfo();
+
     @InjectPresenter
     public ResultPresenter mPresenter;
 
@@ -79,9 +81,9 @@ public class ResultActivity extends MvpAppCompatActivity implements ResultView {
     private static final int START_DOWNLOAD = 0x002;      //启动下载
     private static final int REFRESH_ITEM = 0x003;      //个别刷新
 
-    private MyHandler myHandler = new MyHandler(this);
     private MainType mainType;
 
+    private MyHandler myHandler = new MyHandler(this);
     static class MyHandler extends Handler {
         WeakReference<ResultActivity> mActivityReference;
 
@@ -95,9 +97,10 @@ public class ResultActivity extends MvpAppCompatActivity implements ResultView {
             if (activity != null) {
                 switch (msg.what) {
                     case REFRESH_DATA:
+                        LogUtil.LogShow("normalList.sizeREFRESH_DATA = " + activity.normalList.size(), LogUtil.ERROR);
                         activity.normalAdapter.setDataChanged(activity.normalList);
                         activity.hotAdapter.notifyDataSetChanged();
-                        Toast.makeText(activity, "更新数据" + activity.normalList.get(0).getFileName(), Toast.LENGTH_SHORT).show();
+                        //    Toast.makeText(activity, "更新数据" + activity.normalList.get(0).getFileName(), Toast.LENGTH_SHORT).show();
                         break;
                     case START_DOWNLOAD:
                         String url = (String) msg.obj;
@@ -125,9 +128,10 @@ public class ResultActivity extends MvpAppCompatActivity implements ResultView {
         mGetLearnSdk.setOnApkInstallListener(new OnApkInstallListener() {
             @Override
             public void sdkSetApkInsta(String s) {
-                LogUtil.LogShow("安装结果是：" + s, LogUtil.DEBUG);
+                LogUtil.LogShow("安装结果是：" + s, LogUtil.DEBUG);//0 成功, 1 失败
                 if (s.equals("0")) {
-                    //安装成功，写入数据库
+                    //安装成功，写入数据库，显示在游戏界面，根据包名跳转
+                    AppInfoDao.add(appInfo1);
                 }
                 waitDialog.dismiss();
             }
@@ -176,6 +180,13 @@ public class ResultActivity extends MvpAppCompatActivity implements ResultView {
             public void onClick(View view, AppItem info, int position) {
                 Toast.makeText(ResultActivity.this, "点击了下载" + info.getId(), Toast.LENGTH_SHORT).show();
                 mGetLearnSdk.getResUrl(ResultActivity.this, info.getId());
+                //标记对象
+                appInfo1.setId(info.getId());
+                appInfo1.setCategoryId(info.getCategoryId());
+                appInfo1.setFileName(info.getFileName());
+                appInfo1.setTopCategoryId(info.getTopCategoryId());
+                appInfo1.setIcon1(info.getIcon1());
+                appInfo1.setType("1");
             }
         }, new OnItemClickCallback<AppItem>() {
             @Override
@@ -192,11 +203,12 @@ public class ResultActivity extends MvpAppCompatActivity implements ResultView {
                 AppInfoDao.add(appInfo);
                 //删掉数据
                 normalList.remove(position);
+                refreshList(normalList);
 //                normalAdapter.notifyItemChanged(position);
-                normalAdapter.notifyItemRemoved(position);
+               /* normalAdapter.notifyItemRemoved(position);
                 if (position != normalList.size()) {
                     normalAdapter.notifyItemRangeChanged(position, normalList.size() - position);
-                }
+                }*/
 
             }
         });
@@ -204,16 +216,46 @@ public class ResultActivity extends MvpAppCompatActivity implements ResultView {
             @Override
             public void onClick(View view, AppItem info, int position) {
                 Toast.makeText(ResultActivity.this, "点击了下载" + info.getId(), Toast.LENGTH_SHORT).show();
-                if (waitDialog == null){
-                    waitDialog = new WaitDialog(ResultActivity.this);
-                }
-                waitDialog.show();
+                mGetLearnSdk.getResUrl(ResultActivity.this, info.getId());
+                //标记对象
+                appInfo1.setId(info.getId());
+                appInfo1.setCategoryId(info.getCategoryId());
+                appInfo1.setFileName(info.getFileName());
+                appInfo1.setTopCategoryId(info.getTopCategoryId());
+                appInfo1.setIcon1(info.getIcon1());
+                appInfo1.setType("1");
             }
         }, new OnItemClickCallback<AppItem>() {
 
             @Override
             public void onClick(View view, AppItem info, int position) {
                 Toast.makeText(ResultActivity.this, "点击了收藏" + info.getId(), Toast.LENGTH_SHORT).show();
+                AppInfo appInfo = new AppInfo();
+                appInfo.setId(info.getId());
+                appInfo.setCategoryId(info.getCategoryId());
+                appInfo.setFileName(info.getFileName());
+                appInfo.setTopCategoryId(info.getTopCategoryId());
+                appInfo.setIcon1(info.getIcon1());
+                appInfo.setType("2");
+                AppInfoDao.add(appInfo);
+                //删掉数据
+                hotList.remove(position);
+                //                normalAdapter.notifyItemChanged(position);
+                //热门游戏更新数据
+                hotAdapter.notifyItemRemoved(position);
+                if(position != hotList.size()){
+                    hotAdapter.notifyItemRangeChanged(position, hotList.size() - position);
+                }
+                //分类列表更新数据,过滤掉已收藏的数据
+                LogUtil.LogShow("normalList.size = " + normalList.size(), LogUtil.ERROR);
+                for(int i = 0; i < normalList.size(); i++){
+                    if(info.getId().equals(normalList.get(i).getId())){
+                        normalList.remove(i);
+                        break;
+                    }
+                }
+                LogUtil.LogShow("normalList.size = " + normalList.size(), LogUtil.ERROR);
+                refreshList(normalList);
             }
         });
         mPresenter.getNormalList(mainType.getCategroyId(), this);
@@ -233,11 +275,6 @@ public class ResultActivity extends MvpAppCompatActivity implements ResultView {
         if(hotList.size() == 0 && normalList.size() >= 1){
             hotList.add(normalList.get(0));
         }
-        /*hotList.add(new AppItem("001", "www.ww.ww.www"));
-        hotList.add(new AppItem("002", "www.ww.ww.www"));
-        hotList.add(new AppItem("003", "www.ww.ww.www"));
-        hotList.add(new AppItem("004", "www.ww.ww.www"));
-        hotList.add(new AppItem("005", "www.ww.ww.www"));*/
     }
 
     private void initNormalData() {
@@ -433,4 +470,12 @@ public class ResultActivity extends MvpAppCompatActivity implements ResultView {
     }
 
     private WaitDialog waitDialog;
+
+    @Override
+    protected void onDestroy(){
+        super.onDestroy();
+        if(waitDialog != null){
+            waitDialog.dismiss();
+        }
+    }
 }

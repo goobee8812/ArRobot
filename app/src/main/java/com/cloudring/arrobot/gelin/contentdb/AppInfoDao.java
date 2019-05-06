@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.cloudring.arrobot.gelin.utils.GlobalUtil;
 import com.raizlabs.android.dbflow.sql.language.OperatorGroup;
+import com.raizlabs.android.dbflow.sql.language.SQLite;
 import com.raizlabs.android.dbflow.sql.language.Select;
 
 import java.util.List;
@@ -60,14 +61,14 @@ public class AppInfoDao {
         return new Select().from(AppInfo.class).where(op).queryList();
     }
 
-    public void update(AppInfo appInfo, String userSN, String tinyid) {
+    public static void update(AppInfo appInfo, String userSN, String tinyid){
         appInfo.update();
 
     }
 
-    public void update(AppInfo appInfo) {
-        appInfo.update();
-
+    public static void update(String appId, String type){
+        SQLite.update(AppInfo.class).set(AppInfo_Table.type.eq(type)).where(AppInfo_Table.id.eq(appId)).execute();
+        //  appInfo.update();
     }
 
     public static void deleteAll(){
@@ -77,6 +78,18 @@ public class AppInfoDao {
                 info.delete();
             }
         }
+    }
+
+    public static void deleteList(List<AppInfo> list){
+        if(list.size() > 0){
+            for(AppInfo info : list){
+                info.delete();
+            }
+        }
+    }
+
+    public static void delete(AppInfo appInfo){
+        appInfo.delete();
     }
 
     public static void deleteTXBinderInfoByID(AppInfo appInfo) {

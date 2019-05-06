@@ -119,7 +119,7 @@ public class MainActivity extends MvpAppCompatActivity implements MainView{
             case R.id.id_collection_iv:
                 PageJumpUtil.startMineActivity(MainActivity.this,GlobalUtil.INTENT_TYPE_COLLECTION);
                 break;
-            case R.id.id_search_iv:
+            case R.id.id_search_iv://搜索
                 PageJumpUtil.startSearchActivity(MainActivity.this);
                 break;
             default:
