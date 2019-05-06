@@ -125,17 +125,19 @@ public class ResultActivity extends MvpAppCompatActivity implements ResultView {
         initData();
         initView();
         //安装apk 回调
-        mGetLearnSdk.setOnApkInstallListener(new OnApkInstallListener() {
+        mGetLearnSdk.setOnApkInstallListener(new OnApkInstallListener(){
             @Override
-            public void sdkSetApkInsta(String s) {
-                LogUtil.LogShow("安装结果是：" + s, LogUtil.DEBUG);//0 成功, 1 失败
+            public void sdkSetApkInsta(String s, String packName){
+                LogUtil.LogShow("安装结果是：" + s+"----包名="+packName, LogUtil.DEBUG);//0 成功, 1 失败
                 if (s.equals("0")) {
                     //安装成功，写入数据库，显示在游戏界面，根据包名跳转
+                    appInfo1.setPackageName(packName);
                     AppInfoDao.add(appInfo1);
                 }
                 waitDialog.dismiss();
             }
         });
+
         //url回调
         mGetLearnSdk.setOnUrlListener(new OnUrlListener() {
             @Override
@@ -386,7 +388,7 @@ public class ResultActivity extends MvpAppCompatActivity implements ResultView {
                 .setLayoutView(R.layout.dialog_down_apk)
                 .setVagueBackground(true)
                 //.setDialogItemClickListener(new int[]{R.id.btn_ok, R.id.btn_cancel})
-                .setCanceledOnTouchOutside(true)
+                .setCanceledOnTouchOutside(false)
                 .create();
 
         noticeDialog.show();

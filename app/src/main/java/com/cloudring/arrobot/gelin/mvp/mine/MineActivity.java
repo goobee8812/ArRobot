@@ -120,11 +120,11 @@ public class MineActivity extends MvpAppCompatActivity implements MineView {
         //安装apk 回调
         mGetLearnSdk.setOnApkInstallListener(new OnApkInstallListener(){
             @Override
-            public void sdkSetApkInsta(String s){
-                LogUtil.LogShow("安装结果是：" + s, LogUtil.DEBUG);//0 成功, 1 失败
+            public void sdkSetApkInsta(String s, String packName){
+                LogUtil.LogShow("安装结果是：" + s+"----包名="+packName, LogUtil.DEBUG);//0 成功, 1 失败
                 if(s.equals("0")){
                     //安装成功，修改为我的游戏，显示在游戏界面，根据包名跳转
-                    AppInfoDao.update(appInfo1.getId(), "1");
+                    AppInfoDao.update(appInfo1.getId(), "1", packName);
                     if(currentPosition == 0){
                         mPresenter.getMineData(categoryType);
                     }else{
@@ -134,6 +134,7 @@ public class MineActivity extends MvpAppCompatActivity implements MineView {
                 waitDialog.dismiss();
             }
         });
+
         //url回调
         mGetLearnSdk.setOnUrlListener(new OnUrlListener(){
             @Override
@@ -161,12 +162,12 @@ public class MineActivity extends MvpAppCompatActivity implements MineView {
                     //获取已安装所有应用的包名
                     //   loadApps();
                     //在我的游戏界面
-                    LogUtil.LogShow("包名=" + info.getTopCategoryId(), LogUtil.ERROR);
-                    if(MyUtil.isPkgInstalled(MineActivity.this, info.getTopCategoryId())){
+                    LogUtil.LogShow("包名=" + info.getPackageName(), LogUtil.ERROR);
+                    if(MyUtil.isPkgInstalled(MineActivity.this, info.getPackageName())){
                         PackageManager packageManager = getPackageManager();
                         Intent intent = new Intent();
                         // 这里面的值是你要跳转app的包名，你跳转的清单文件里的package名
-                        intent = packageManager.getLaunchIntentForPackage(info.getTopCategoryId());
+                        intent = packageManager.getLaunchIntentForPackage(info.getPackageName());
                         startActivity(intent);
                     }else{
                         Toast.makeText(MineActivity.this, "尚未安装此应用", Toast.LENGTH_SHORT).show();
@@ -332,7 +333,7 @@ public class MineActivity extends MvpAppCompatActivity implements MineView {
         }
         noticeDialog = new UniversalDialog.Builder(MineActivity.this).setLayoutView(R.layout.dialog_down_apk).setVagueBackground(true)
                 //.setDialogItemClickListener(new int[]{R.id.btn_ok, R.id.btn_cancel})
-                .setCanceledOnTouchOutside(true).create();
+                .setCanceledOnTouchOutside(false).create();
         noticeDialog.show();
         downprogress = noticeDialog.findViewById(R.id.downprogress);
         progress_persent = noticeDialog.findViewById(R.id.progress_persent);

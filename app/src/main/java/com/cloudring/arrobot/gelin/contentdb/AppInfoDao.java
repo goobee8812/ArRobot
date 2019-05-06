@@ -66,9 +66,10 @@ public class AppInfoDao {
 
     }
 
-    public static void update(String appId, String type){
-        SQLite.update(AppInfo.class).set(AppInfo_Table.type.eq(type)).where(AppInfo_Table.id.eq(appId)).execute();
-        //  appInfo.update();
+    public static void update(String appId, String type, String packName){
+        SQLite.update(AppInfo.class)
+                .set(AppInfo_Table.type.eq(type),AppInfo_Table.packageName.eq(packName))
+                .where(AppInfo_Table.id.eq(appId)).execute();
     }
 
     public static void deleteAll(){

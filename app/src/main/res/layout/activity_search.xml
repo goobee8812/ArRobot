@@ -38,7 +38,7 @@
             android:id="@+id/search_iv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="@dimen/DIMEN_3DP"
+            android:padding="@dimen/DIMEN_5DP"
             android:layout_marginRight="@dimen/DIMEN_10DP"
             android:src="@drawable/search_img" />
     </LinearLayout>

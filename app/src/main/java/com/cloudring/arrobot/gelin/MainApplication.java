@@ -6,8 +6,6 @@ import android.content.Context;
 import com.cloudring.arrobot.gelin.download.FileHelper;
 import com.raizlabs.android.dbflow.config.FlowManager;
 
-import java.io.IOException;
-
 public class MainApplication extends Application {
     private static Context mContext;
     private static MainApplication instance;
@@ -24,12 +22,12 @@ public class MainApplication extends Application {
         try {
             su = Runtime.getRuntime().exec("su");
 //            su = Runtime.getRuntime().exec("/system/bin/su");
-//            String cmd = "chmod 777 " + FileHelper.getDownloadApkCachePath() + "\n"
-//                    + "exit\n";
-//            su.getOutputStream().write(cmd.getBytes());
-//            if ((su.waitFor() != 0)) {
-//                throw new SecurityException();
-//            }
+            String cmd = "chmod 777 " + FileHelper.getDownloadApkCachePath() + "\n"
+                    + "exit\n";
+            su.getOutputStream().write(cmd.getBytes());
+            if ((su.waitFor() != 0)) {
+                throw new SecurityException();
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
