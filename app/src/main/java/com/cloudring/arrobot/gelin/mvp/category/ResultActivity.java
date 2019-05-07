@@ -175,6 +175,7 @@ public class ResultActivity extends MvpAppCompatActivity implements ResultView {
         mainType = (MainType) getIntent().getSerializableExtra(ContantsUtil.MAIN_TYPE);
         String categroyName = mainType.getCategroyName();
         titleTv.setText(categroyName);
+
         hotList = new ArrayList<>();
         normalList = new ArrayList<>();
         normalAdapter = new AppAdapter(normalList, new OnItemClickCallback<AppItem>() {
@@ -184,7 +185,7 @@ public class ResultActivity extends MvpAppCompatActivity implements ResultView {
                 mGetLearnSdk.getResUrl(ResultActivity.this, info.getId());
                 //标记对象
                 appInfo1.setId(info.getId());
-                appInfo1.setCategoryId(info.getCategoryId());
+                appInfo1.setCategoryId(info.getCategoryId()+"");
                 appInfo1.setFileName(info.getFileName());
                 appInfo1.setTopCategoryId(info.getTopCategoryId());
                 appInfo1.setIcon1(info.getIcon1());
@@ -196,11 +197,12 @@ public class ResultActivity extends MvpAppCompatActivity implements ResultView {
                 AppInfo appInfo = new AppInfo();
 
                 appInfo.setId(info.getId());
-                appInfo.setCategoryId(info.getCategoryId());
+                appInfo.setCategoryId(info.getCategoryId()+"");
                 appInfo.setFileName(info.getFileName());
                 appInfo.setTopCategoryId(info.getTopCategoryId());
                 appInfo.setIcon1(info.getIcon1());
                 appInfo.setType("2");
+                LogUtil.e("点击CategoryId = "+appInfo.getCategoryId());
 
                 AppInfoDao.add(appInfo);
                 //删掉数据
@@ -221,7 +223,7 @@ public class ResultActivity extends MvpAppCompatActivity implements ResultView {
                 mGetLearnSdk.getResUrl(ResultActivity.this, info.getId());
                 //标记对象
                 appInfo1.setId(info.getId());
-                appInfo1.setCategoryId(info.getCategoryId());
+                appInfo1.setCategoryId(info.getCategoryId()+"");
                 appInfo1.setFileName(info.getFileName());
                 appInfo1.setTopCategoryId(info.getTopCategoryId());
                 appInfo1.setIcon1(info.getIcon1());
@@ -234,7 +236,7 @@ public class ResultActivity extends MvpAppCompatActivity implements ResultView {
                 Toast.makeText(ResultActivity.this, "点击了收藏" + info.getId(), Toast.LENGTH_SHORT).show();
                 AppInfo appInfo = new AppInfo();
                 appInfo.setId(info.getId());
-                appInfo.setCategoryId(info.getCategoryId());
+                appInfo.setCategoryId(info.getCategoryId()+"");
                 appInfo.setFileName(info.getFileName());
                 appInfo.setTopCategoryId(info.getTopCategoryId());
                 appInfo.setIcon1(info.getIcon1());
@@ -268,9 +270,8 @@ public class ResultActivity extends MvpAppCompatActivity implements ResultView {
             hotList.clear();
         }
         for(int i = 0; i < normalList.size(); i++){
-            String recommended = normalList.get(i).getRecommended();
-            int parseInt = Integer.parseInt(recommended);
-            if(parseInt > 0){
+            int recommended = normalList.get(i).getRecommended();
+            if(recommended > 0){
                 hotList.add(normalList.get(i));
             }
         }

@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.cloudring.arrobot.gelin.R;
 import com.cloudring.arrobot.gelin.mvp.modle.AppItem;
+import com.cloudring.arrobot.gelin.utils.Constant;
 import com.cloudring.arrobot.gelin.utils.imageloader.ImageUtils;
 
 import java.util.ArrayList;
@@ -18,6 +19,8 @@ import java.util.List;
  * Created by Goobee_yuer on 2018/8/14.
  */
 public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> {
+
+    private OnItemClickListener mOnItemClickListener;
 
     private List<AppItem> mAppList = new ArrayList<>();
 
@@ -58,16 +61,30 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
         AppItem item = mAppList.get(position);
+     //   LogUtil.e("CategoryId = "+item.getCategoryId());
         holder.nameTv.setText(item.getFileName());
         if (type == 0){
+            holder.mCheckBox.setVisibility(View.GONE);
         }else if (type == 1){
             holder.collectionStr.setVisibility(View.GONE);
+            holder.mCheckBox.setVisibility(View.VISIBLE);
             holder.downloadStr.setText("打开游戏");
+            if (item.isSelect()) {
+                holder.mCheckBox.setImageResource(R.mipmap.ic_checked);
+            } else {
+                holder.mCheckBox.setImageResource(R.mipmap.ic_uncheck);
+            }
         }else if (type == 2) {
             holder.collectionStr.setVisibility(View.GONE);
+            holder.mCheckBox.setVisibility(View.VISIBLE);
             holder.downloadStr.setText("下载");
+            if (item.isSelect()) {
+                holder.mCheckBox.setBackgroundResource(R.mipmap.ic_checked);
+            } else {
+                holder.mCheckBox.setBackgroundResource(R.mipmap.ic_uncheck);
+            }
         }
-        ImageUtils.getInstance().display(holder.appImg,item.getIcon1(),R.drawable.ar_robot_img_default,R.drawable.ar_robot_img_default);
+        ImageUtils.getInstance().display(holder.appImg, Constant.BaseHttp+item.getIcon1(),R.drawable.ar_robot_img_default,R.drawable.ar_robot_img_default);
         holder.downloadStr.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -81,6 +98,20 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> {
                 collectionCallback.onClick(view, mAppList.get(position),position);
             }
         });
+
+        holder.mCheckBox.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mOnItemClickListener.onItemClickListener(holder.getAdapterPosition(), mAppList);
+            }
+        });
+    }
+
+    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
+        this.mOnItemClickListener = onItemClickListener;
+    }
+    public interface OnItemClickListener {
+        void onItemClickListener(int pos,List<AppItem> myLiveList);
     }
 
     @Override
@@ -93,12 +124,14 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> {
         TextView nameTv;
         TextView downloadStr;
         TextView collectionStr;
+        ImageView mCheckBox;
         public ViewHolder(View itemView) {
             super(itemView);
             appImg = (ImageView) itemView.findViewById(R.id.id_img);
             nameTv = itemView.findViewById(R.id.id_name_tv);
             downloadStr = (TextView) itemView.findViewById(R.id.id_down_tv);
             collectionStr = (TextView) itemView.findViewById(R.id.id_collection_tv);
+            mCheckBox = (ImageView) itemView.findViewById(R.id.check_box);
         }
     }
 }

@@ -6,10 +6,10 @@ import java.nio.ByteBuffer;
 
 public class LogUtil {
 
-	public static String TAG = "TestAll: ";
+	public static String TAG = "LogUtil: ";
 
 	/** 锁，是否关闭Log日志输出 */
-	public static boolean LogOFF = false;
+	public static boolean LogOFF = true;
 	/** 文件 */
 //	public static boolean LogFile = false;
 	/** 五种Log日志类型 */
@@ -34,7 +34,7 @@ public class LogUtil {
 //					(date + Message).getBytes());
 //			return;
 //		}
-		if (!LogOFF) {
+		if (LogOFF) {
 			switch (Style) {
 			case DEBUG: {
 				Log.d(TAG, Message);
@@ -59,6 +59,34 @@ public class LogUtil {
 			default:
 				break;
 			}
+		}
+	}
+
+	/**
+	 * 打印错误基本的信息
+	 * @param str 要打印的信息
+	 */
+	public static void e(String str){
+		if(LogOFF){
+			Log.e(TAG,str);
+		}
+	}
+	/**
+	 * 打印警告基本的信息
+	 * @param str 要打印的信息
+	 */
+	public static void w(String str){
+		if(LogOFF){
+			Log.w(TAG,str);
+		}
+	}
+	/**
+	 * 打印调试基本的信息
+	 * @param str 要打印的信息
+	 */
+	public static void d(String str){
+		if(LogOFF){
+			Log.d(TAG,str);
 		}
 	}
 

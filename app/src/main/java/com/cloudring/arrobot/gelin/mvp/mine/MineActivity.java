@@ -32,6 +32,8 @@ import com.cloudring.arrobot.gelin.download.UniversalDialog;
 import com.cloudring.arrobot.gelin.download.Utils;
 import com.cloudring.arrobot.gelin.download.test.DownloadUtil;
 import com.cloudring.arrobot.gelin.mvp.modle.AppItem;
+import com.cloudring.arrobot.gelin.mvp.modle.MainType;
+import com.cloudring.arrobot.gelin.utils.ContantsUtil;
 import com.cloudring.arrobot.gelin.utils.GlobalUtil;
 import com.cloudring.arrobot.gelin.utils.LogUtil;
 import com.cloudring.arrobot.gelin.utils.MyUtil;
@@ -115,6 +117,7 @@ public class MineActivity extends MvpAppCompatActivity implements MineView {
         setContentView(R.layout.activity_mine);
         ButterKnife.bind(this);
         initData();
+        initEvent();
         initView();
         mGetLearnSdk = new GetLearnSdk();
         //安装apk 回调
@@ -151,7 +154,29 @@ public class MineActivity extends MvpAppCompatActivity implements MineView {
 
     }
 
+    private void initEvent(){
+        normalAdapter.setOnItemClickListener(new AppAdapter.OnItemClickListener(){
+            @Override
+            public void onItemClickListener(int pos, List<AppItem> myLiveList){
+                AppItem myLive = myLiveList.get(pos);
+                boolean isSelect = myLive.isSelect();
+                if (!isSelect) {
+                    myLive.setSelect(true);
+                } else {
+                    myLive.setSelect(false);
+                }
+                normalAdapter.notifyDataSetChanged();
+            }
+        });
+    }
+
     private void initData() {
+        List<MainType> typeList = (List<MainType>) getIntent().getSerializableExtra(ContantsUtil.MAIN_TYPE_LIST);
+        MainType mainType = new MainType();
+        mainType.setCategroyName("全部");
+        typeList.add(0,mainType);
+        LogUtil.e("typeList.size = "+typeList.size());
+
         normalListData = new ArrayList<>();
         itemListData = new ArrayList<>();
         initItemData();
@@ -177,7 +202,7 @@ public class MineActivity extends MvpAppCompatActivity implements MineView {
                     mGetLearnSdk.getResUrl(MineActivity.this, info.getId());
                     //标记对象
                     appInfo1.setId(info.getId());
-                    appInfo1.setCategoryId(info.getCategoryId());
+                    appInfo1.setCategoryId(info.getCategoryId()+"");
                     appInfo1.setFileName(info.getFileName());
                     appInfo1.setTopCategoryId(info.getTopCategoryId());
                     appInfo1.setIcon1(info.getIcon1());
@@ -192,15 +217,16 @@ public class MineActivity extends MvpAppCompatActivity implements MineView {
             }
         });
 
-        listAdapter = new ListAdapter(this, itemListData, new OnItemClickCallback<String>() {
+        listAdapter = new ListAdapter(this, typeList, new OnItemClickCallback<MainType>() {
             @Override
-            public void onClick(View view, String info,int position) {
+            public void onClick(View view, MainType mainType1,int position) {
                 if (currentPosition == position) return;
                 currentPosition = position;
                 if (position == 0){
                     mPresenter.getMineData(categoryType);
                 }else {
                     mPresenter.getMineCategoryData(categoryType,getCategoryId(position));
+                    LogUtil.e("currentPosition = "+currentPosition);
                 }
             }
         });
@@ -234,14 +260,14 @@ public class MineActivity extends MvpAppCompatActivity implements MineView {
     }
 
     private void initItemData() {
-        itemListData.add("全部");
+       /* itemListData.add("全部");
         itemListData.add("记忆");
         itemListData.add("情商");
         itemListData.add("习惯");
         itemListData.add("语言");
         itemListData.add("数理");
         itemListData.add("认知");
-        itemListData.add("逻辑");
+        itemListData.add("逻辑");*/
     }
 
     private void initNormalData() {
@@ -286,11 +312,25 @@ public class MineActivity extends MvpAppCompatActivity implements MineView {
         myHandler.sendEmptyMessage(REFRESH_DATA);
     }
 
-    @OnClick({R.id.id_back_iv})
+    @OnClick({R.id.id_back_iv,R.id.delete_tv})
     public void onClickEvent(View v) {
         switch (v.getId()){
             case R.id.id_back_iv:
                 finish();
+                break;
+            case R.id.delete_tv:
+                for(int i = 0; i<normalListData.size();i++){
+                    boolean isSelect = normalListData.get(i).isSelect;
+                    if(isSelect){//从数据库中删除
+                        String id = normalListData.get(i).getId();
+                        AppInfoDao.delete(id);
+                    }
+                }
+                if (currentPosition == 0){
+                    mPresenter.getMineData(categoryType);
+                }else {
+                    mPresenter.getMineCategoryData(categoryType,getCategoryId(currentPosition));
+                }
                 break;
             default:
                 break;

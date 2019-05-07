@@ -1,5 +1,6 @@
 package com.cloudring.arrobot.gelin.utils;
 
+import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.codec.digest.DigestUtils;
 
 import java.util.Map;
@@ -38,10 +39,12 @@ public class ApiUtils{
         // 拼接 SK（SecretKey）
         sb.deleteCharAt(sb.length()-1);
         sb.append(secretKey);
-        System.out.println(sb.toString());
+        LogUtil.e(sb.toString());
 
         // MD5 Hash
-        String signature = DigestUtils.md5Hex(sb.toString());
+     //   String signature = DigestUtils.md5Hex(sb.toString());
+
+        String signature = new String(Hex.encodeHex(DigestUtils.md5(sb.toString())));
 
         return signature;
     }

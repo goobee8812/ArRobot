@@ -59,7 +59,7 @@ public class MainActivity extends MvpAppCompatActivity implements MainView{
 
     //格林授权初始化
     private GetLearnSdk mGetLearnSdk;
-
+    private List<MainType> resultList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,7 +93,9 @@ public class MainActivity extends MvpAppCompatActivity implements MainView{
     public void onClickEvent(View v) {
         switch (v.getId()) {
             case R.id.id_my_game_iv:
-                PageJumpUtil.startMineActivity(MainActivity.this,GlobalUtil.INTENT_TYPE_GAME);
+                if(resultList != null && resultList.size() >0){
+                    PageJumpUtil.startMineActivity(MainActivity.this, GlobalUtil.INTENT_TYPE_GAME, resultList);
+                }
                 break;
             case R.id.id_jiyi_iv:
                 PageJumpUtil.startResultActivity(MainActivity.this,GlobalUtil.INTENT_TYPE_JIYI);
@@ -117,7 +119,9 @@ public class MainActivity extends MvpAppCompatActivity implements MainView{
                 PageJumpUtil.startResultActivity(MainActivity.this,GlobalUtil.INTENT_TYPE_LOGIC);
                 break;
             case R.id.id_collection_iv:
-                PageJumpUtil.startMineActivity(MainActivity.this,GlobalUtil.INTENT_TYPE_COLLECTION);
+                if(resultList != null && resultList.size() >0){
+                    PageJumpUtil.startMineActivity(MainActivity.this, GlobalUtil.INTENT_TYPE_COLLECTION, resultList);
+                }
                 break;
             case R.id.id_search_iv://搜索
                 PageJumpUtil.startSearchActivity(MainActivity.this);
@@ -144,8 +148,11 @@ public class MainActivity extends MvpAppCompatActivity implements MainView{
         runOnUiThread(new Runnable(){
             @Override
             public void run(){
-                List<MainType> resultList = PRClient.getInstance().getTypeResultList();
+                resultList = PRClient.getInstance().getTypeResultList();
                 adapter.setData(resultList);
+                myGameIv.setVisibility(View.VISIBLE);
+                myCollectionIv.setVisibility(View.VISIBLE);
+                mySearchIv.setVisibility(View.VISIBLE);
             }
         });
     }

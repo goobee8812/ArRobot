@@ -36,7 +36,7 @@ public class MinePresenter extends BasePresenter<MineView> {
     // 读取数据库内容
     public void getMineCategoryData(String type,String categoryId){
         List<AppInfo> list = new ArrayList<>();
-        LogUtil.LogShow("type: " + type + " ---categoryId:" + categoryId,LogUtil.DEBUG);
+        LogUtil.e("type: " + type + " ---categoryId:" + categoryId);
         list = AppInfoDao.getCategoryAppList(type,categoryId);
         List<AppItem> appItems = new ArrayList<>();
         if (list.size() > 0){
@@ -45,6 +45,7 @@ public class MinePresenter extends BasePresenter<MineView> {
                 appItems.add(appItem);
             }
         }
+        LogUtil.e("list.size = "+list.size());
         getViewState().refreshList(appItems);
     }
 }

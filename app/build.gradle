@@ -108,6 +108,7 @@ dependencies {
     implementation 'com.squareup.okhttp3:okhttp-urlconnection:3.9.0'
     implementation 'com.squareup.okhttp3:logging-interceptor:3.9.0'
     implementation 'com.google.code.gson:gson:2.8.0'
+    implementation 'com.squareup.okio:okio:1.9.0'
     implementation 'io.reactivex.rxjava2:rxjava:2.0.5'
     implementation 'io.reactivex.rxjava2:rxandroid:2.0.1'
     implementation 'com.squareup.retrofit2:retrofit-converters:2.3.0'
@@ -131,8 +132,8 @@ dependencies {
     compile "com.github.Raizlabs.DBFlow:dbflow-core:${dbflow_version}"
     compile "com.github.Raizlabs.DBFlow:dbflow:${dbflow_version}"
     annotationProcessor "com.github.Raizlabs.DBFlow:dbflow-processor:${dbflow_version}"
-    implementation files('libs/commons-codec-1.10.jar')
     implementation files('libs/hutool-all-4.0.11.jar')
     implementation files('libs/slf4j-log4j12-1.7.7.jar')
     implementation files('libs/activation.jar')
+    implementation 'org.apache.directory.studio:org.apache.commons.codec:1.8'
 }

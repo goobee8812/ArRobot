@@ -14,6 +14,7 @@ import com.cloudring.arrobot.gelin.manager.PRClient;
 import com.cloudring.arrobot.gelin.mvp.network.APIService;
 import com.cloudring.arrobot.gelin.mvp.network.request.GetMainTypeRequest;
 import com.cloudring.arrobot.gelin.mvp.network.response.GetMainTypeResponce;
+import com.cloudring.arrobot.gelin.utils.LogUtil;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -34,11 +35,29 @@ public class MainPresenter extends BasePresenter<MainView>{
     }
 
     private void getTypeIdList(String deviceId){
+       /* SortedMap<String, Object> parameters = new TreeMap<>();
+        Long timStamp = ApiUtils.generateTimestamp();
+        parameters.put("appAk", ContantsUtil.geling_ak);
+        parameters.put("apiName", "getResList");
+        parameters.put("timeStamp", timStamp.toString());
+        parameters.put("keyword", strKey);
+        parameters.put("recursion", "1");
+
+        RequestBody body = new FormBody.Builder()
+                .add("keyword", strKey)
+                .add("appAk", ContantsUtil.geling_ak)
+                .add("apiName","getResList")
+                .add("timeStamp", timStamp.toString())
+                .add("recursion", "1")
+                .add("sign", ApiUtils.generateSignature(parameters, ContantsUtil.geling_sk))
+                .build();*/
+
         APIService apiService = NetworkClient.getInstance().getService(APIService.class);
         GetMainTypeRequest request = new GetMainTypeRequest(deviceId);
         apiService.getListType(request).enqueue(new Callback<GetMainTypeResponce>(){
             @Override
             public void onResponse(Call<GetMainTypeResponce> call, Response<GetMainTypeResponce> response){
+                LogUtil.e("response = " +response.toString());
                 if(response.isSuccessful() && response.body().isResult()){
                     Log.d(TAG, "onResponse: 成功" + response.body().data.categoryList.size());
                     if(!Check.isEmpty(response.body().data.categoryList)){

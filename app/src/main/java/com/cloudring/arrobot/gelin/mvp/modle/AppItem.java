@@ -1,7 +1,13 @@
 package com.cloudring.arrobot.gelin.mvp.modle;
 
 import com.alibaba.fastjson.annotation.JSONField;
+import com.google.gson.Gson;
 import com.google.gson.annotations.SerializedName;
+import com.google.gson.reflect.TypeToken;
+
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * yc
@@ -13,15 +19,15 @@ public class AppItem {
 
     @JSONField(ordinal = 2)
     @SerializedName("subject")
-    private String subject;  //
+    private int subject;  //
 
     @JSONField(ordinal = 3)
     @SerializedName("studySection")
-    private String studySection;  //
+    private int studySection;  //
 
     @JSONField(ordinal = 4)
     @SerializedName("categoryId")
-    private String categoryId;  //APP 分类
+    private int categoryId;  //APP 分类
 
     @JSONField(ordinal = 5)
     @SerializedName("fileName")
@@ -29,7 +35,7 @@ public class AppItem {
 
     @JSONField(ordinal = 6)
     @SerializedName("grade")
-    private String grade;  //APP
+    private int grade;  //APP
 
     @JSONField(ordinal = 7)
     @SerializedName("courseId")
@@ -37,11 +43,11 @@ public class AppItem {
 
     @JSONField(ordinal = 8)
     @SerializedName("version")
-    private String version;  //APP
+    private int version;  //APP
 
     @JSONField(ordinal = 9)
     @SerializedName("semester")
-    private String semester;  //APP
+    private int semester;  //APP
 
     @JSONField(ordinal = 10)
     @SerializedName("icon1")
@@ -58,7 +64,18 @@ public class AppItem {
     private String type;  //APP 0：默认  1：已下载  2：收藏
 
     @SerializedName("recommended")
-    private String recommended;
+    private int recommended;
+
+    public static AppItem objectFromData(String str){
+        return new Gson().fromJson(str, AppItem.class);
+    }
+
+    public static List<AppItem> arrayAppItemFromData(String str){
+        Type listType = new TypeToken<ArrayList<AppItem>>(){
+        }.getType();
+        return new Gson().fromJson(str, listType);
+    }
+
 
     public AppItem(String id, String fileName) {
         this.id = id;
@@ -81,27 +98,27 @@ public class AppItem {
         this.id = id;
     }
 
-    public String getSubject() {
+    public int getSubject() {
         return subject;
     }
 
-    public void setSubject(String subject) {
+    public void setSubject(int subject) {
         this.subject = subject;
     }
 
-    public String getStudySection() {
+    public int getStudySection() {
         return studySection;
     }
 
-    public void setStudySection(String studySection) {
+    public void setStudySection(int studySection) {
         this.studySection = studySection;
     }
 
-    public String getCategoryId() {
+    public int getCategoryId() {
         return categoryId;
     }
 
-    public void setCategoryId(String categoryId) {
+    public void setCategoryId(int categoryId) {
         this.categoryId = categoryId;
     }
 
@@ -113,11 +130,11 @@ public class AppItem {
         this.fileName = fileName;
     }
 
-    public String getGrade() {
+    public int getGrade() {
         return grade;
     }
 
-    public void setGrade(String grade) {
+    public void setGrade(int grade) {
         this.grade = grade;
     }
 
@@ -129,19 +146,19 @@ public class AppItem {
         this.courseId = courseId;
     }
 
-    public String getVersion() {
+    public int getVersion() {
         return version;
     }
 
-    public void setVersion(String version) {
+    public void setVersion(int version) {
         this.version = version;
     }
 
-    public String getSemester() {
+    public int getSemester() {
         return semester;
     }
 
-    public void setSemester(String semester) {
+    public void setSemester(int semester) {
         this.semester = semester;
     }
 
@@ -177,12 +194,22 @@ public class AppItem {
         this.topCategoryId = topCategoryId;
     }
 
-    public String getRecommended(){
+    public int getRecommended(){
         return recommended;
     }
 
-    public void setRecommended(String recommended){
+    public void setRecommended(int recommended){
         this.recommended = recommended;
+    }
+
+    public boolean isSelect;
+
+    public boolean isSelect() {
+        return isSelect;
+    }
+
+    public void setSelect(boolean isSelect) {
+        this.isSelect = isSelect;
     }
 
 

@@ -8,15 +8,16 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.cloudring.arrobot.gelin.R;
+import com.cloudring.arrobot.gelin.mvp.modle.MainType;
 
 import java.util.List;
 
 public class ListAdapter extends BaseAdapter {
     private Context context;
-    private List<String> mDatas;
+    private List<MainType> mDatas;
     private OnItemClickCallback clickCallback;
 
-    public ListAdapter(Context context, List<String> mDatas, OnItemClickCallback clickCallback) {
+    public ListAdapter(Context context, List<MainType> mDatas, OnItemClickCallback clickCallback) {
         this.context = context;
         this.mDatas = mDatas;
         this.clickCallback = clickCallback;
@@ -49,7 +50,8 @@ public class ListAdapter extends BaseAdapter {
             //得到缓存的布局
             viewHolder = (ViewHolder) convertView.getTag();
         }
-        viewHolder.itemTv.setText(mDatas.get(position));
+        MainType mainType = mDatas.get(position);
+        viewHolder.itemTv.setText(mainType.getCategroyName());
         viewHolder.itemTv.setOnClickListener(v -> clickCallback.onClick(v,mDatas.get(position),position));
         return convertView;
     }

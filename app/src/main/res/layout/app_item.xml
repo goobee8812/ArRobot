@@ -10,6 +10,15 @@
         android:layout_width="@dimen/DIMEN_180DP"
         android:layout_height="@dimen/DIMEN_180DP"
         />
+    
+    <ImageView
+        android:id="@+id/check_box"
+        android:background="@mipmap/ic_uncheck"
+        android:layout_width="@dimen/DIMEN_30DP"
+        android:layout_height="@dimen/DIMEN_30DP"
+        android:layout_alignParentRight="true"
+        android:layout_margin="@dimen/DIMEN_10DP"
+        android:visibility="gone"/>
     <TextView
         android:id="@+id/id_name_tv"
         android:layout_width="match_parent"

@@ -353,12 +353,12 @@ public class FileHelper {
         } else {
             appCachePath = Environment.getDataDirectory().getPath() + "/GelinDownload";
         }
-      //  String path = appCachePath.replaceFirst("/", "");
-        File file = new File(appCachePath);
+        String path = appCachePath.replaceFirst("/", "");
+        File file = new File(path);
         if (!file.exists()) {
             file.mkdirs();
         }
-        return appCachePath;
+        return path;
     }
 
     public static boolean checkSDCard() {

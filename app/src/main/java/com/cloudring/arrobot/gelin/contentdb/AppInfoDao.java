@@ -57,7 +57,7 @@ public class AppInfoDao {
     public static List<AppInfo> getCategoryAppList(String type, String CategoryId) {
         OperatorGroup op = OperatorGroup.clause(OperatorGroup.clause()
                 .and(AppInfo_Table.type.eq(type))
-                .and(AppInfo_Table.topCategoryId.eq(CategoryId)));
+                .and(AppInfo_Table.categoryId.eq(CategoryId)));
         return new Select().from(AppInfo.class).where(op).queryList();
     }
 
@@ -89,8 +89,8 @@ public class AppInfoDao {
         }
     }
 
-    public static void delete(AppInfo appInfo){
-        appInfo.delete();
+    public static void delete(String id){
+        SQLite.delete(AppInfo.class).where(AppInfo_Table.id.eq(id)).execute();
     }
 
     public static void deleteTXBinderInfoByID(AppInfo appInfo) {

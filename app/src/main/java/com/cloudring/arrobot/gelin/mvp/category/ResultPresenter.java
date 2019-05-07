@@ -13,33 +13,32 @@ import com.arellomobile.mvp.InjectViewState;
 import com.cloudring.arrobot.gelin.MainApplication;
 import com.cloudring.arrobot.gelin.R;
 import com.cloudring.arrobot.gelin.base.BasePresenter;
-import com.cloudring.arrobot.gelin.contentdb.AppInfo;
 import com.cloudring.arrobot.gelin.contentdb.AppInfoDao;
-import com.cloudring.arrobot.gelin.download.Check;
 import com.cloudring.arrobot.gelin.download.FileHelper;
-import com.cloudring.arrobot.gelin.download.NetworkClient;
 import com.cloudring.arrobot.gelin.download.NetworkUtil;
 import com.cloudring.arrobot.gelin.download.UniversalDialog;
 import com.cloudring.arrobot.gelin.download.Utils;
 import com.cloudring.arrobot.gelin.download.test.DownloadUtil;
-import com.cloudring.arrobot.gelin.manager.PRClient;
 import com.cloudring.arrobot.gelin.mvp.modle.AppItem;
-import com.cloudring.arrobot.gelin.mvp.network.APIService;
-import com.cloudring.arrobot.gelin.mvp.network.APIUtils;
-import com.cloudring.arrobot.gelin.mvp.network.request.GetAppListByTypeRequest;
-import com.cloudring.arrobot.gelin.mvp.network.response.GetListAppByTypeIdResponse;
+import com.cloudring.arrobot.gelin.utils.ApiUtils;
+import com.cloudring.arrobot.gelin.utils.CallBackUtil;
+import com.cloudring.arrobot.gelin.utils.Constant;
+import com.cloudring.arrobot.gelin.utils.ContantsUtil;
 import com.cloudring.arrobot.gelin.utils.LogUtil;
+import com.cloudring.arrobot.gelin.utils.OkHttpUtil;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-
+import okhttp3.FormBody;
+import okhttp3.RequestBody;
 
 @InjectViewState
 public class ResultPresenter extends BasePresenter<ResultView> {
@@ -56,7 +55,62 @@ public class ResultPresenter extends BasePresenter<ResultView> {
     }
 
     public void getNormalList(String categoryId){
-        APIService apiService = NetworkClient.getInstance().getService(APIService.class);
+        LogUtil.e("categoryId = "+categoryId);
+        SortedMap<String, Object> parameters = new TreeMap<>();
+        Long timStamp = ApiUtils.generateTimestamp();
+        parameters.put("appAk", ContantsUtil.geling_ak);
+        parameters.put("apiName", "getResList");
+        parameters.put("timeStamp", timStamp.toString());
+        parameters.put("recursion", "1");
+        parameters.put("categoryId",categoryId);
+
+        RequestBody body = new FormBody.Builder()
+                .add("appAk", ContantsUtil.geling_ak)
+                .add("apiName","getResList")
+                .add("timeStamp", timStamp.toString())
+                .add("recursion", "1")
+                .add("categoryId", categoryId)
+                .add("sign", ApiUtils.generateSignature(parameters, ContantsUtil.geling_sk))
+                .build();
+        OkHttpUtil.doPost(Constant.GET_SEARCH_CATEGORY, body, new CallBackUtil.IRequestCallback(){
+            @Override
+            public void success(Object o){
+                LogUtil.e("o = "+o.toString());
+                try{
+                    JSONObject root = new JSONObject(o.toString());
+                    int code = root.getInt("code");
+                    if(code == 0){
+                        String result1 = ApiUtils.decryptData(root.getString("data"), ContantsUtil.geling_sk);
+                        result1 = ApiUtils.decodeUnicode(result1);
+                        LogUtil.e("result1 = " + result1);
+                        JSONObject resultObj = new JSONObject(result1);
+                        JSONArray list = resultObj.getJSONArray("list");
+                        List<AppItem> appItems = AppItem.arrayAppItemFromData(list.toString());
+
+                        List<AppItem> listTiem = new ArrayList<>();
+                        if (appItems.size() > 0){
+                            for (AppItem item : appItems){
+                                if (AppInfoDao.getByFileName(item.getFileName()) == null){
+                                    listTiem.add(item);
+                                }
+                            }
+                        }
+                        getViewState().refreshList(listTiem);
+                    }else {
+                        getViewState().loadFail();
+                    }
+                }catch(JSONException e){
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void error(String msg){
+            }
+        });
+
+
+        /*APIService apiService = NetworkClient.getInstance().getService(APIService.class);
         GetAppListByTypeRequest listAppRequest = new GetAppListByTypeRequest(categoryId);
 //        getViewState().refreshList("","","");
         apiService.getListApp(listAppRequest)
@@ -90,7 +144,7 @@ public class ResultPresenter extends BasePresenter<ResultView> {
             public void onFailure(Call<GetListAppByTypeIdResponse> call, Throwable t) {
                 getViewState().loadFail();
             }
-        });
+        });*/
     }
 
     UniversalDialog noticeDialog;

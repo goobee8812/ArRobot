@@ -32,4 +32,16 @@
         android:layout_marginRight="@dimen/DIMEN_50DP"
         android:layout_marginTop="@dimen/DIMEN_10DP"></android.support.v7.widget.RecyclerView>
 
+    <TextView
+        android:id="@+id/delete_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/whitef"
+        android:textSize="@dimen/DIMEN_20SP"
+        android:gravity="center"
+        android:drawablePadding="@dimen/DIMEN_10DP"
+        android:drawableLeft="@drawable/ar_robot_delete"
+        android:layout_alignParentRight="true"
+        android:layout_margin="20dp"
+        android:text="删除"/>
 </RelativeLayout>

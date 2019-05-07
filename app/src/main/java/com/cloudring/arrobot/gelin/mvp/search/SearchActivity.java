@@ -31,6 +31,7 @@ import com.cloudring.arrobot.gelin.download.test.DownloadUtil;
 import com.cloudring.arrobot.gelin.mvp.modle.AppItem;
 import com.cloudring.arrobot.gelin.utils.LogUtil;
 import com.cloudring.arrobot.gelin.utils.MyUtil;
+import com.cloudring.arrobot.gelin.utils.ToastUtils;
 import com.cloudring.arrobot.gelin.utils.WaitDialog;
 import com.getlearn.library.GetLearnSdk;
 import com.getlearn.library.Interface.OnApkInstallListener;
@@ -156,7 +157,7 @@ public class SearchActivity extends MvpAppCompatActivity implements SearchView{
                 mGetLearnSdk.getResUrl(SearchActivity.this, info.getId());
                 //标记对象
                 appInfo1.setId(info.getId());
-                appInfo1.setCategoryId(info.getCategoryId());
+                appInfo1.setCategoryId(info.getCategoryId()+"");
                 appInfo1.setFileName(info.getFileName());
                 appInfo1.setTopCategoryId(info.getTopCategoryId());
                 appInfo1.setIcon1(info.getIcon1());
@@ -168,23 +169,24 @@ public class SearchActivity extends MvpAppCompatActivity implements SearchView{
                 AppInfo appInfo = new AppInfo();
 
                 appInfo.setId(info.getId());
-                appInfo.setCategoryId(info.getCategoryId());
+                appInfo.setCategoryId(info.getCategoryId()+"");
                 appInfo.setFileName(info.getFileName());
                 appInfo.setTopCategoryId(info.getTopCategoryId());
                 appInfo.setIcon1(info.getIcon1());
                 appInfo.setType("2");
 
                 AppInfoDao.add(appInfo);
+                ToastUtils.showToast(SearchActivity.this,"收藏成功");
                 //删掉数据
-                normalList.remove(position);
-                refreshList(normalList);
+              /*  normalList.remove(position);
+                refreshList(normalList);*/
             }
         });
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 4);
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 3);
         normalRecycler.setLayoutManager(gridLayoutManager);
         normalRecycler.setAdapter(normalAdapter);
 
-        mPresenter.getSearchList("X", SearchActivity.this);
+        mPresenter.getSearchList("", SearchActivity.this);
     }
 
     @OnClick({R.id.id_back_iv, R.id.search_iv})
@@ -194,6 +196,8 @@ public class SearchActivity extends MvpAppCompatActivity implements SearchView{
                 finish();
                 break;
             case R.id.search_iv://搜索
+                String keyContent = etSearch.getText().toString();
+                mPresenter.getSearchList(keyContent, SearchActivity.this);
                 break;
             default:
                 break;
