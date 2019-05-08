@@ -85,7 +85,7 @@ public class MainActivity extends MvpAppCompatActivity implements MainView{
         recyclerView.setLayoutManager(gridLayoutManager);
         recyclerView.setAdapter(adapter);
         String deviceId = DeviceUtil.getLocalDeviceID(MainActivity.this);
-        mPresenter.getTypeList(deviceId, MainActivity.this);
+        mPresenter.getTypeList("0", MainActivity.this);
     }
 
     @OnClick({R.id.id_my_game_iv,R.id.id_jiyi_iv,R.id.id_qingshang_iv,R.id.id_xiguan_iv,R.id.id_yuyan_iv,R.id.id_shuli_iv,
@@ -149,7 +149,7 @@ public class MainActivity extends MvpAppCompatActivity implements MainView{
             @Override
             public void run(){
                 resultList = PRClient.getInstance().getTypeResultList();
-                adapter.setData(resultList);
+                adapter.setData(list);
                 myGameIv.setVisibility(View.VISIBLE);
                 myCollectionIv.setVisibility(View.VISIBLE);
                 mySearchIv.setVisibility(View.VISIBLE);

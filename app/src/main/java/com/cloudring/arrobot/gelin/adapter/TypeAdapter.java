@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import com.cloudring.arrobot.gelin.R;
 import com.cloudring.arrobot.gelin.mvp.category.ResultActivity;
 import com.cloudring.arrobot.gelin.mvp.modle.MainType;
+import com.cloudring.arrobot.gelin.utils.Constant;
 import com.cloudring.arrobot.gelin.utils.ContantsUtil;
 import com.cloudring.arrobot.gelin.utils.imageloader.ImageUtils;
 
@@ -44,21 +45,13 @@ public class TypeAdapter extends RecyclerView.Adapter<TypeAdapter.RViewHolder>{
     @Override
     public void onBindViewHolder(final RViewHolder holder, final int position){
         final MainType item = types.get(position);
-        ImageUtils.getInstance().display(holder.ivType, item.getIcon(), R.drawable.ar_robot_jiyi, R.drawable.ar_robot_jiyi);
-
-        /*if (selectedPosition == position) {
-            holder.tvColor.setBackgroundResource(R.mipmap.select_bg);
-        } else {
-            holder.tvColor.setBackgroundResource(R.mipmap.normal_bg);
-        }*/
+        ImageUtils.getInstance().display(holder.ivType, Constant.BaseHttp+item.getIcon(), R.drawable.ar_robot_jiyi, R.drawable.ar_robot_jiyi);
         holder.itemView.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
                 Intent intent = new Intent(activity, ResultActivity.class);
                 intent.putExtra(ContantsUtil.MAIN_TYPE, item);
                 activity.startActivity(intent);
-                //   changeState(position);
-                //   activity.setType(goodsType.getGoodsTypeNo());
             }
         });
     }

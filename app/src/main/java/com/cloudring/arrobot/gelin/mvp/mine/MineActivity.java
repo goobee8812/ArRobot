@@ -37,6 +37,7 @@ import com.cloudring.arrobot.gelin.utils.ContantsUtil;
 import com.cloudring.arrobot.gelin.utils.GlobalUtil;
 import com.cloudring.arrobot.gelin.utils.LogUtil;
 import com.cloudring.arrobot.gelin.utils.MyUtil;
+import com.cloudring.arrobot.gelin.utils.ToastUtils;
 import com.cloudring.arrobot.gelin.utils.WaitDialog;
 import com.getlearn.library.GetLearnSdk;
 import com.getlearn.library.Interface.OnApkInstallListener;
@@ -133,6 +134,19 @@ public class MineActivity extends MvpAppCompatActivity implements MineView {
                     }else{
                         mPresenter.getMineCategoryData(categoryType, getCategoryId(currentPosition));
                     }
+                    runOnUiThread(new Runnable(){
+                        @Override
+                        public void run(){
+                            ToastUtils.showToast(MineActivity.this, "安装成功，可到我的游戏中打开游戏");
+                        }
+                    });
+                }else {
+                    runOnUiThread(new Runnable(){
+                        @Override
+                        public void run(){
+                            ToastUtils.showToast(MineActivity.this, "更新失败，请先卸载后安装");
+                        }
+                    });
                 }
                 waitDialog.dismiss();
             }
@@ -152,6 +166,14 @@ public class MineActivity extends MvpAppCompatActivity implements MineView {
             }
         });
 
+     //   test();
+    }
+
+    private void test(){
+        String path = "sdcard/wyt/Dowdload";//FileHelper.getDownloadApkCachePath();
+        String name = "7777.apk";//getString(R.string.download_apkname, "testapk");
+        mGetLearnSdk.setApkInstall(MineActivity.this, path, name);
+        LogUtil.LogShow("安装的apk:" + name + "__路径：" + path, LogUtil.ERROR);
     }
 
     private void initEvent(){
@@ -173,16 +195,20 @@ public class MineActivity extends MvpAppCompatActivity implements MineView {
     private void initData() {
         List<MainType> typeList = (List<MainType>) getIntent().getSerializableExtra(ContantsUtil.MAIN_TYPE_LIST);
         MainType mainType = new MainType();
-        mainType.setCategroyName("全部");
+        mainType.setCategName("全部");
         typeList.add(0,mainType);
         LogUtil.e("typeList.size = "+typeList.size());
 
         normalListData = new ArrayList<>();
         itemListData = new ArrayList<>();
-        initItemData();
+     //   initItemData();
         normalAdapter = new AppAdapter(normalListData, new OnItemClickCallback<AppItem>() {
             @Override
             public void onClick(View view, AppItem info,int position) {
+                if(MyUtil.isFastClick()){
+                    return;
+                }
+
                 if(type.equals(GlobalUtil.INTENT_TYPE_GAME)){//点击根据包名进入游戏
                     //获取已安装所有应用的包名
                     //   loadApps();
@@ -213,7 +239,6 @@ public class MineActivity extends MvpAppCompatActivity implements MineView {
 
             @Override
             public void onClick(View view, AppItem info,int position) {
-                Toast.makeText(MineActivity.this, "点击了收藏" + info.getId(), Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -225,7 +250,7 @@ public class MineActivity extends MvpAppCompatActivity implements MineView {
                 if (position == 0){
                     mPresenter.getMineData(categoryType);
                 }else {
-                    mPresenter.getMineCategoryData(categoryType,getCategoryId(position));
+                    mPresenter.getMineCategoryData(categoryType,mainType1.getId()+"");//根据CategoryId查询数据库
                     LogUtil.e("currentPosition = "+currentPosition);
                 }
             }

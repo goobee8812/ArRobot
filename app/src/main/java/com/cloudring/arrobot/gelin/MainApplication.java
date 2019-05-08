@@ -3,7 +3,6 @@ package com.cloudring.arrobot.gelin;
 import android.app.Application;
 import android.content.Context;
 
-import com.cloudring.arrobot.gelin.download.FileHelper;
 import com.raizlabs.android.dbflow.config.FlowManager;
 
 public class MainApplication extends Application {
@@ -18,16 +17,24 @@ public class MainApplication extends Application {
         mContext = getApplicationContext();
         FlowManager.init(this);
 
+        String apkRoot="chmod 777 "+getPackageCodePath();
+      //  String apkRoot = "chmod 777 " + FileHelper.getDownloadApkCachePath();
+      //  boolean isRootSuccess = MyUtil.RootCommand(apkRoot);
+      //  LogUtil.e("isRootSuccess = "+isRootSuccess);
+
         Process su;
         try {
-            su = Runtime.getRuntime().exec("su");
+//            su = Runtime.getRuntime().exec("su");
 //            su = Runtime.getRuntime().exec("/system/bin/su");
-            String cmd = "chmod 777 " + FileHelper.getDownloadApkCachePath() + "\n"
-                    + "exit\n";
-            su.getOutputStream().write(cmd.getBytes());
+  //          String cmd = "chmod 777 " + FileHelper.getDownloadApkCachePath() + "\n" + "exit\n";
+           /* String apkRoot="chmod 777 "+getPackageCodePath();
+            boolean isRootSuccess = MyUtil.RootCommand(apkRoot);
+            LogUtil.e("isRootSuccess = "+isRootSuccess);*/
+
+         /*   su.getOutputStream().write(cmd.getBytes());
             if ((su.waitFor() != 0)) {
                 throw new SecurityException();
-            }
+            }*/
         } catch (Exception e) {
             e.printStackTrace();
         }

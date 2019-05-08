@@ -52,6 +52,7 @@ public class SearchPresenter extends BasePresenter<SearchView>{
         parameters.put("appAk", ContantsUtil.geling_ak);
         parameters.put("apiName", "getResList");
         parameters.put("timeStamp", timStamp.toString());
+        parameters.put("pageSize","100");
     //    parameters.put("keyword", strKey);
         parameters.put("recursion", "1");
 
@@ -61,6 +62,7 @@ public class SearchPresenter extends BasePresenter<SearchView>{
                 .add("apiName","getResList")
                 .add("timeStamp", timStamp.toString())
                 .add("recursion", "1")
+                .add("pageSize","100")
                 .add("sign", ApiUtils.generateSignature(parameters, ContantsUtil.geling_sk))
                 .build();
         OkHttpUtil.doPost(Constant.GET_SEARCH_CATEGORY, body, new CallBackUtil.IRequestCallback(){
@@ -97,6 +99,7 @@ public class SearchPresenter extends BasePresenter<SearchView>{
         parameters.put("apiName", "getResList");
         parameters.put("timeStamp", timStamp.toString());
         parameters.put("keyword", strKey);
+        parameters.put("pageSize","100");
         parameters.put("recursion", "1");
 
         RequestBody body = new FormBody.Builder()
@@ -105,6 +108,7 @@ public class SearchPresenter extends BasePresenter<SearchView>{
                 .add("apiName","getResList")
                 .add("timeStamp", timStamp.toString())
                 .add("recursion", "1")
+                .add("pageSize","100")
                 .add("sign", ApiUtils.generateSignature(parameters, ContantsUtil.geling_sk))
                 .build();
         OkHttpUtil.doPost(Constant.GET_SEARCH_CATEGORY, body, new CallBackUtil.IRequestCallback(){

@@ -32,6 +32,7 @@
             android:textColor="@color/whitef"
             android:textSize="@dimen/DIMEN_18SP"
             android:paddingLeft="@dimen/DIMEN_8DP"
+            android:focusable="false"
             android:background="@null" />
         
         <ImageView

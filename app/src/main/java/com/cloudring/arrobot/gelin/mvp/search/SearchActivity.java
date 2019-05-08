@@ -14,7 +14,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.arellomobile.mvp.MvpAppCompatActivity;
 import com.arellomobile.mvp.presenter.InjectPresenter;
@@ -128,6 +127,19 @@ public class SearchActivity extends MvpAppCompatActivity implements SearchView{
                     //安装成功，写入数据库，显示在游戏界面，根据包名跳转
                     appInfo1.setPackageName(packName);
                     AppInfoDao.add(appInfo1);
+                    runOnUiThread(new Runnable(){
+                        @Override
+                        public void run(){
+                            ToastUtils.showToast(SearchActivity.this, "安装成功，可到我的游戏中打开游戏");
+                        }
+                    });
+                }else {
+                    runOnUiThread(new Runnable(){
+                        @Override
+                        public void run(){
+                            ToastUtils.showToast(SearchActivity.this, "更新失败，请先卸载后安装");
+                        }
+                    });
                 }
                 waitDialog.dismiss();
             }
@@ -153,7 +165,10 @@ public class SearchActivity extends MvpAppCompatActivity implements SearchView{
         normalAdapter = new AppAdapter(normalList, new OnItemClickCallback<AppItem>() {
             @Override
             public void onClick(View view, AppItem info, int position) {
-                Toast.makeText(SearchActivity.this, "点击了下载" + info.getId(), Toast.LENGTH_SHORT).show();
+                if(MyUtil.isFastClick()){
+                    return;
+                }
+           //     Toast.makeText(SearchActivity.this, "点击了下载" + info.getId(), Toast.LENGTH_SHORT).show();
                 mGetLearnSdk.getResUrl(SearchActivity.this, info.getId());
                 //标记对象
                 appInfo1.setId(info.getId());
@@ -166,8 +181,10 @@ public class SearchActivity extends MvpAppCompatActivity implements SearchView{
         }, new OnItemClickCallback<AppItem>() {
             @Override
             public void onClick(View view, AppItem info, int position) {
+                if(MyUtil.isFastClick()){
+                    return;
+                }
                 AppInfo appInfo = new AppInfo();
-
                 appInfo.setId(info.getId());
                 appInfo.setCategoryId(info.getCategoryId()+"");
                 appInfo.setFileName(info.getFileName());

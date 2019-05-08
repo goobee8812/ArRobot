@@ -14,7 +14,6 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.arellomobile.mvp.MvpAppCompatActivity;
 import com.arellomobile.mvp.presenter.InjectPresenter;
@@ -33,6 +32,8 @@ import com.cloudring.arrobot.gelin.mvp.modle.MainType;
 import com.cloudring.arrobot.gelin.utils.ContantsUtil;
 import com.cloudring.arrobot.gelin.utils.GlobalUtil;
 import com.cloudring.arrobot.gelin.utils.LogUtil;
+import com.cloudring.arrobot.gelin.utils.MyUtil;
+import com.cloudring.arrobot.gelin.utils.ToastUtils;
 import com.cloudring.arrobot.gelin.utils.WaitDialog;
 import com.getlearn.library.GetLearnSdk;
 import com.getlearn.library.Interface.OnApkInstallListener;
@@ -133,6 +134,19 @@ public class ResultActivity extends MvpAppCompatActivity implements ResultView {
                     //安装成功，写入数据库，显示在游戏界面，根据包名跳转
                     appInfo1.setPackageName(packName);
                     AppInfoDao.add(appInfo1);
+                    runOnUiThread(new Runnable(){
+                        @Override
+                        public void run(){
+                            ToastUtils.showToast(ResultActivity.this, "安装成功，可到我的游戏中打开游戏");
+                        }
+                    });
+                }else {
+                    runOnUiThread(new Runnable(){
+                        @Override
+                        public void run(){
+                            ToastUtils.showToast(ResultActivity.this, "更新失败，请先卸载后安装");
+                        }
+                    });
                 }
                 waitDialog.dismiss();
             }
@@ -173,7 +187,7 @@ public class ResultActivity extends MvpAppCompatActivity implements ResultView {
         }*/
         //主界面分类对象
         mainType = (MainType) getIntent().getSerializableExtra(ContantsUtil.MAIN_TYPE);
-        String categroyName = mainType.getCategroyName();
+        String categroyName = mainType.getCategName();
         titleTv.setText(categroyName);
 
         hotList = new ArrayList<>();
@@ -181,7 +195,10 @@ public class ResultActivity extends MvpAppCompatActivity implements ResultView {
         normalAdapter = new AppAdapter(normalList, new OnItemClickCallback<AppItem>() {
             @Override
             public void onClick(View view, AppItem info, int position) {
-                Toast.makeText(ResultActivity.this, "点击了下载" + info.getId(), Toast.LENGTH_SHORT).show();
+                if(MyUtil.isFastClick()){
+                    return;
+                }
+           //     Toast.makeText(ResultActivity.this, "点击了下载" + info.getId(), Toast.LENGTH_SHORT).show();
                 mGetLearnSdk.getResUrl(ResultActivity.this, info.getId());
                 //标记对象
                 appInfo1.setId(info.getId());
@@ -194,8 +211,10 @@ public class ResultActivity extends MvpAppCompatActivity implements ResultView {
         }, new OnItemClickCallback<AppItem>() {
             @Override
             public void onClick(View view, AppItem info, int position) {
+                if(MyUtil.isFastClick()){
+                    return;
+                }
                 AppInfo appInfo = new AppInfo();
-
                 appInfo.setId(info.getId());
                 appInfo.setCategoryId(info.getCategoryId()+"");
                 appInfo.setFileName(info.getFileName());
@@ -219,7 +238,10 @@ public class ResultActivity extends MvpAppCompatActivity implements ResultView {
         hotAdapter = new AppAdapter(hotList, new OnItemClickCallback<AppItem>() {
             @Override
             public void onClick(View view, AppItem info, int position) {
-                Toast.makeText(ResultActivity.this, "点击了下载" + info.getId(), Toast.LENGTH_SHORT).show();
+                if(MyUtil.isFastClick()){
+                    return;
+                }
+             //   Toast.makeText(ResultActivity.this, "点击了下载" + info.getId(), Toast.LENGTH_SHORT).show();
                 mGetLearnSdk.getResUrl(ResultActivity.this, info.getId());
                 //标记对象
                 appInfo1.setId(info.getId());
@@ -233,7 +255,10 @@ public class ResultActivity extends MvpAppCompatActivity implements ResultView {
 
             @Override
             public void onClick(View view, AppItem info, int position) {
-                Toast.makeText(ResultActivity.this, "点击了收藏" + info.getId(), Toast.LENGTH_SHORT).show();
+                if(MyUtil.isFastClick()){
+                    return;
+                }
+             //   Toast.makeText(ResultActivity.this, "点击了收藏" + info.getId(), Toast.LENGTH_SHORT).show();
                 AppInfo appInfo = new AppInfo();
                 appInfo.setId(info.getId());
                 appInfo.setCategoryId(info.getCategoryId()+"");
@@ -262,7 +287,7 @@ public class ResultActivity extends MvpAppCompatActivity implements ResultView {
                 refreshList(normalList);
             }
         });
-        mPresenter.getNormalList(mainType.getCategroyId(), this);
+        mPresenter.getNormalList(mainType.getId()+"", this);
     }
 
     private void initHotData(List<AppItem> normalList){
@@ -407,6 +432,7 @@ public class ResultActivity extends MvpAppCompatActivity implements ResultView {
                 if (isDown) {
                     if (mFilpath != null && mFilpath.length() > 1) {
                         boolean isdelete = Utils.deleteAPKExists(mFilpath);
+                        LogUtil.e("isdelete = "+isdelete);
                         mFilpath = "";
                     }
                     isDown = false;
