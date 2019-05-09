@@ -59,10 +59,12 @@ public class SearchActivity extends MvpAppCompatActivity implements SearchView{
     EditText etSearch;
     @BindView(R.id.search_iv)
     ImageView ivSearch;
+    @BindView(R.id.delete_iv)
+    ImageView ivDelete;
     private String keyString = "";
     private List<AppItem> normalList;
     private GetLearnSdk mGetLearnSdk;
-    private AppInfo appInfo1 = new AppInfo();
+    private AppInfo appInfo1;
     private static final int REFRESH_DATA = 0x001;      //刷新数据
     private static final int START_DOWNLOAD = 0x002;      //启动下载
 
@@ -127,6 +129,16 @@ public class SearchActivity extends MvpAppCompatActivity implements SearchView{
                     //安装成功，写入数据库，显示在游戏界面，根据包名跳转
                     appInfo1.setPackageName(packName);
                     AppInfoDao.add(appInfo1);
+                    List<AppItem> listTiem = new ArrayList<>();
+                    if (normalList.size() > 0){
+                        for (AppItem item : normalList){
+                            if (AppInfoDao.getByFileName(item.getFileName()) == null){
+                                listTiem.add(item);
+                            }
+                        }
+                    }
+                    refreshList(listTiem);
+
                     runOnUiThread(new Runnable(){
                         @Override
                         public void run(){
@@ -137,7 +149,7 @@ public class SearchActivity extends MvpAppCompatActivity implements SearchView{
                     runOnUiThread(new Runnable(){
                         @Override
                         public void run(){
-                            ToastUtils.showToast(SearchActivity.this, "更新失败，请先卸载后安装");
+                            ToastUtils.showToast(SearchActivity.this, "安装或更新失败，请先卸载后安装");
                         }
                     });
                 }
@@ -171,6 +183,7 @@ public class SearchActivity extends MvpAppCompatActivity implements SearchView{
            //     Toast.makeText(SearchActivity.this, "点击了下载" + info.getId(), Toast.LENGTH_SHORT).show();
                 mGetLearnSdk.getResUrl(SearchActivity.this, info.getId());
                 //标记对象
+                appInfo1 = new AppInfo();
                 appInfo1.setId(info.getId());
                 appInfo1.setCategoryId(info.getCategoryId()+"");
                 appInfo1.setFileName(info.getFileName());
@@ -194,6 +207,16 @@ public class SearchActivity extends MvpAppCompatActivity implements SearchView{
 
                 AppInfoDao.add(appInfo);
                 ToastUtils.showToast(SearchActivity.this,"收藏成功");
+
+                List<AppItem> listTiem = new ArrayList<>();
+                if (normalList.size() > 0){
+                    for (AppItem item : normalList){
+                        if (AppInfoDao.getByFileName(item.getFileName()) == null){
+                            listTiem.add(item);
+                        }
+                    }
+                }
+                refreshList(listTiem);
                 //删掉数据
               /*  normalList.remove(position);
                 refreshList(normalList);*/
@@ -206,7 +229,7 @@ public class SearchActivity extends MvpAppCompatActivity implements SearchView{
         mPresenter.getSearchList("", SearchActivity.this);
     }
 
-    @OnClick({R.id.id_back_iv, R.id.search_iv})
+    @OnClick({R.id.id_back_iv, R.id.search_iv, R.id.delete_iv})
     public void onClickEvent(View v){
         switch(v.getId()){
             case R.id.id_back_iv:
@@ -215,6 +238,10 @@ public class SearchActivity extends MvpAppCompatActivity implements SearchView{
             case R.id.search_iv://搜索
                 String keyContent = etSearch.getText().toString();
                 mPresenter.getSearchList(keyContent, SearchActivity.this);
+                break;
+            case R.id.delete_iv:
+                keyString = "";
+                etSearch.setText("");
                 break;
             default:
                 break;
@@ -245,6 +272,14 @@ public class SearchActivity extends MvpAppCompatActivity implements SearchView{
     public void refreshList(List<AppItem> list){
         normalList = list;
         myHandler.sendEmptyMessage(REFRESH_DATA);
+        runOnUiThread(new Runnable(){
+            @Override
+            public void run(){
+                if(normalList != null && normalList.size() == 0){
+                    ToastUtils.showToast(SearchActivity.this, "未搜索到相关游戏，请重新输入搜索内容");
+                }
+            }
+        });
     }
 
 

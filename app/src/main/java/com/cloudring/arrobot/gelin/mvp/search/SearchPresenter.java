@@ -8,6 +8,7 @@ import android.text.TextUtils;
 import com.arellomobile.mvp.InjectViewState;
 import com.cloudring.arrobot.gelin.MainApplication;
 import com.cloudring.arrobot.gelin.base.BasePresenter;
+import com.cloudring.arrobot.gelin.contentdb.AppInfoDao;
 import com.cloudring.arrobot.gelin.download.NetworkUtil;
 import com.cloudring.arrobot.gelin.mvp.modle.AppItem;
 import com.cloudring.arrobot.gelin.utils.ApiUtils;
@@ -21,6 +22,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.SortedMap;
 import java.util.TreeMap;
@@ -79,7 +81,16 @@ public class SearchPresenter extends BasePresenter<SearchView>{
                         JSONObject resultObj = new JSONObject(result1);
                         JSONArray list = resultObj.getJSONArray("list");
                         List<AppItem> appItems = AppItem.arrayAppItemFromData(list.toString());
-                        getViewState().refreshList(appItems);
+
+                        List<AppItem> listTiem = new ArrayList<>();
+                        if (appItems.size() > 0){
+                            for (AppItem item : appItems){
+                                if (AppInfoDao.getByFileName(item.getFileName()) == null){
+                                    listTiem.add(item);
+                                }
+                            }
+                        }
+                        getViewState().refreshList(listTiem);
                     }
                 }catch(JSONException e){
                     e.printStackTrace();

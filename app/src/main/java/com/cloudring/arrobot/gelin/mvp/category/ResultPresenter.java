@@ -62,6 +62,7 @@ public class ResultPresenter extends BasePresenter<ResultView> {
         parameters.put("apiName", "getResList");
         parameters.put("timeStamp", timStamp.toString());
         parameters.put("recursion", "1");
+        parameters.put("pageSize","50");
         parameters.put("categoryId",categoryId);
 
         RequestBody body = new FormBody.Builder()
@@ -69,20 +70,21 @@ public class ResultPresenter extends BasePresenter<ResultView> {
                 .add("apiName","getResList")
                 .add("timeStamp", timStamp.toString())
                 .add("recursion", "1")
+                .add("pageSize","50")
                 .add("categoryId", categoryId)
                 .add("sign", ApiUtils.generateSignature(parameters, ContantsUtil.geling_sk))
                 .build();
         OkHttpUtil.doPost(Constant.GET_SEARCH_CATEGORY, body, new CallBackUtil.IRequestCallback(){
             @Override
             public void success(Object o){
-                LogUtil.e("o = "+o.toString());
+            //    LogUtil.e("o = "+o.toString());
                 try{
                     JSONObject root = new JSONObject(o.toString());
                     int code = root.getInt("code");
                     if(code == 0){
                         String result1 = ApiUtils.decryptData(root.getString("data"), ContantsUtil.geling_sk);
                         result1 = ApiUtils.decodeUnicode(result1);
-                        LogUtil.e("result1 = " + result1);
+                      //  LogUtil.e("result1 = " + result1);
                         JSONObject resultObj = new JSONObject(result1);
                         JSONArray list = resultObj.getJSONArray("list");
                         List<AppItem> appItems = AppItem.arrayAppItemFromData(list.toString());

@@ -73,7 +73,7 @@ public class MineActivity extends MvpAppCompatActivity implements MineView {
 
     private static String type = "";
     private static String categoryType = "";
-    private AppInfo appInfo1 = new AppInfo();
+    private AppInfo appInfo1;
 
     @InjectPresenter
     public MinePresenter mPresenter;
@@ -144,7 +144,7 @@ public class MineActivity extends MvpAppCompatActivity implements MineView {
                     runOnUiThread(new Runnable(){
                         @Override
                         public void run(){
-                            ToastUtils.showToast(MineActivity.this, "更新失败，请先卸载后安装");
+                            ToastUtils.showToast(MineActivity.this, "安装或更新失败，请先卸载后安装");
                         }
                     });
                 }
@@ -227,6 +227,7 @@ public class MineActivity extends MvpAppCompatActivity implements MineView {
                     //在我的收藏界面
                     mGetLearnSdk.getResUrl(MineActivity.this, info.getId());
                     //标记对象
+                    appInfo1 = new AppInfo();
                     appInfo1.setId(info.getId());
                     appInfo1.setCategoryId(info.getCategoryId()+"");
                     appInfo1.setFileName(info.getFileName());

@@ -28,8 +28,8 @@
         android:layout_height="match_parent"
         android:layout_below="@+id/id_top_view"
         android:layout_toRightOf="@+id/id_list_view"
-        android:layout_marginLeft="@dimen/DIMEN_50DP"
-        android:layout_marginRight="@dimen/DIMEN_50DP"
+        android:layout_marginLeft="@dimen/DIMEN_20DP"
+        android:layout_marginRight="@dimen/DIMEN_20DP"
         android:layout_marginTop="@dimen/DIMEN_10DP"></android.support.v7.widget.RecyclerView>
 
     <TextView

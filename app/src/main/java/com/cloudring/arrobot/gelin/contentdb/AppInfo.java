@@ -88,4 +88,9 @@ public class AppInfo extends BaseModel {
     public void setTopCategoryId(String topCategoryId) {
         this.topCategoryId = topCategoryId;
     }
+
+    @Override
+    public String toString(){
+        return "AppInfo{" + "id='" + id + '\'' + ", categoryId='" + categoryId + '\'' + ", fileName='" + fileName + '\'' + ", type='" + type + '\'' + ", packageName='" + packageName + '\'' + '}';
+    }
 }

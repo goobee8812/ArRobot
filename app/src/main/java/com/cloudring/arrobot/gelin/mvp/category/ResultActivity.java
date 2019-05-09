@@ -71,7 +71,7 @@ public class ResultActivity extends MvpAppCompatActivity implements ResultView {
 
     private GetLearnSdk mGetLearnSdk;
 
-    private AppInfo appInfo1 = new AppInfo();
+    private AppInfo appInfo1;
 
     @InjectPresenter
     public ResultPresenter mPresenter;
@@ -133,7 +133,20 @@ public class ResultActivity extends MvpAppCompatActivity implements ResultView {
                 if (s.equals("0")) {
                     //安装成功，写入数据库，显示在游戏界面，根据包名跳转
                     appInfo1.setPackageName(packName);
+                    LogUtil.e("ApkInsta appInfo1 = "+appInfo1.toString());
                     AppInfoDao.add(appInfo1);
+                    List<AppItem> listTiem = new ArrayList<>();
+                    if (normalList.size() > 0){
+                        for (AppItem item : normalList){
+                            AppInfo byFileName = AppInfoDao.getByFileName(item.getFileName());
+                            LogUtil.e("ApkInsta byFileName = "+byFileName);
+                            if (AppInfoDao.getByFileName(item.getFileName()) == null){
+                                listTiem.add(item);
+                            }
+                        }
+                    }
+                    refreshList(listTiem);
+
                     runOnUiThread(new Runnable(){
                         @Override
                         public void run(){
@@ -144,7 +157,7 @@ public class ResultActivity extends MvpAppCompatActivity implements ResultView {
                     runOnUiThread(new Runnable(){
                         @Override
                         public void run(){
-                            ToastUtils.showToast(ResultActivity.this, "更新失败，请先卸载后安装");
+                            ToastUtils.showToast(ResultActivity.this, "安装或更新失败，请先卸载后安装");
                         }
                     });
                 }
@@ -201,6 +214,7 @@ public class ResultActivity extends MvpAppCompatActivity implements ResultView {
            //     Toast.makeText(ResultActivity.this, "点击了下载" + info.getId(), Toast.LENGTH_SHORT).show();
                 mGetLearnSdk.getResUrl(ResultActivity.this, info.getId());
                 //标记对象
+                appInfo1 = new AppInfo();
                 appInfo1.setId(info.getId());
                 appInfo1.setCategoryId(info.getCategoryId()+"");
                 appInfo1.setFileName(info.getFileName());
@@ -244,12 +258,15 @@ public class ResultActivity extends MvpAppCompatActivity implements ResultView {
              //   Toast.makeText(ResultActivity.this, "点击了下载" + info.getId(), Toast.LENGTH_SHORT).show();
                 mGetLearnSdk.getResUrl(ResultActivity.this, info.getId());
                 //标记对象
+                appInfo1 = new AppInfo();
                 appInfo1.setId(info.getId());
                 appInfo1.setCategoryId(info.getCategoryId()+"");
                 appInfo1.setFileName(info.getFileName());
                 appInfo1.setTopCategoryId(info.getTopCategoryId());
                 appInfo1.setIcon1(info.getIcon1());
                 appInfo1.setType("1");
+
+                LogUtil.e("hotAdapter appInfo1 = "+appInfo1.toString());
             }
         }, new OnItemClickCallback<AppItem>() {
 

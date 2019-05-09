@@ -3,6 +3,7 @@ package com.cloudring.arrobot.gelin.contentdb;
 import android.content.Context;
 
 import com.cloudring.arrobot.gelin.utils.GlobalUtil;
+import com.cloudring.arrobot.gelin.utils.LogUtil;
 import com.raizlabs.android.dbflow.sql.language.OperatorGroup;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
 import com.raizlabs.android.dbflow.sql.language.Select;
@@ -17,8 +18,10 @@ public class AppInfoDao {
 
     public static void add(AppInfo appInfo) {
         //txBinderInfoDaoOpe.create(appInfo);
+        AppInfo byFileName = getByFileName(appInfo.getFileName());
         if (getByFileName(appInfo.getFileName()) == null){
-            appInfo.save();
+            boolean save = appInfo.save();
+            LogUtil.e("issave = "+save);
         }
     }
 
